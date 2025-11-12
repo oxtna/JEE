@@ -1,0 +1,45 @@
+### GET all trainers
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers
+Accept: application/json
+
+###
+
+### GET a specific trainer
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers/c337216a-0808-4984-bbd0-ced1fb68eb6a
+Accept: application/json
+
+###
+
+### GET a trainer’s avatar
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers/c337216a-0808-4984-bbd0-ced1fb68eb6a/avatar
+Accept: image/png
+
+###
+
+### PUT a specific trainer
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers/55555555-4444-3333-2222-1234567890ab
+Content-Type: application/json
+
+{
+  "name": "Ash"
+}
+
+###
+
+### PUT a trainer’s avatar
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers/123e4567-e89b-12d3-a456-426614174000/avatar
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar.png"
+Content-Type: image/png
+
+< ./avatar.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### DELETE a trainer’s avatar
+DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainers/123e4567-e89b-12d3-a456-426614174000/avatar
+
+###
