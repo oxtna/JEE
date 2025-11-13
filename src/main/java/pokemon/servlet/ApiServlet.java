@@ -3,6 +3,7 @@ package pokemon.servlet;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import pokemon.controller.TrainerController;
 import pokemon.model.Avatar;
 
 @WebServlet(name = "ApiServlet", urlPatterns = {"/api/*"})
+@MultipartConfig(maxFileSize =  16 * 1024 * 1024)
 public class ApiServlet extends HttpServlet {
     private TrainerController trainerController;
     private AvatarController avatarController;
@@ -32,7 +34,7 @@ public class ApiServlet extends HttpServlet {
         );
         public static final Pattern TRAINERS = Pattern.compile("/trainers/?");
         public static final Pattern TRAINER = Pattern.compile("/trainers/(%s)/?".formatted(UUID.pattern()));
-        public static final Pattern AVATAR = Pattern.compile("/trainers/(%s)/avatar/?".formatted(TRAINER.pattern()));
+        public static final Pattern AVATAR = Pattern.compile("/trainers/(%s)/avatar/?".formatted(UUID.pattern()));
     }
 
     @Override
