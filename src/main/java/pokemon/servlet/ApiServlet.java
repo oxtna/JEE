@@ -1,8 +1,10 @@
 package pokemon.servlet;
 
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +14,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import jakarta.ws.rs.NotFoundException;
 import pokemon.api.GetTrainer;
 import pokemon.api.PutTrainer;
 import pokemon.controller.AvatarController;
@@ -21,6 +21,7 @@ import pokemon.controller.TrainerController;
 import pokemon.model.Avatar;
 
 @WebServlet(name = "ApiServlet", urlPatterns = {"/api/*"})
+@MultipartConfig(maxFileSize = 16 * 1024 * 1024)
 public class ApiServlet extends HttpServlet {
     private TrainerController trainerController;
     private AvatarController avatarController;
@@ -32,14 +33,13 @@ public class ApiServlet extends HttpServlet {
         );
         public static final Pattern TRAINERS = Pattern.compile("/trainers/?");
         public static final Pattern TRAINER = Pattern.compile("/trainers/(%s)/?".formatted(UUID.pattern()));
-        public static final Pattern AVATAR = Pattern.compile("/trainers/(%s)/avatar/?".formatted(TRAINER.pattern()));
+        public static final Pattern AVATAR = Pattern.compile("/trainers/(%s)/avatar/?".formatted(UUID.pattern()));
     }
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
-        avatarController = (AvatarController) getServletContext().getAttribute("avatarController");
+    @Inject
+    public ApiServlet(TrainerController trainerController, AvatarController avatarController) {
+        this.trainerController = trainerController;
+        this.avatarController = avatarController;
     }
 
     @Override
@@ -79,6 +79,7 @@ public class ApiServlet extends HttpServlet {
         if (path.matches(Patterns.TRAINER.pattern())) {
             UUID uuid = parseUuid(Patterns.TRAINER, path);
             trainerController.putTrainer(uuid, jsonb.fromJson(request.getReader(), PutTrainer.class));
+            response.addHeader("Location", "/api/trainers/" + uuid);
         } else if (path.matches(Patterns.AVATAR.pattern())) {
             UUID uuid = parseUuid(Patterns.AVATAR, path);
             avatarController.putAvatar(uuid, request.getPart("avatar").getInputStream());

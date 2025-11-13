@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import jakarta.enterprise.context.ApplicationScoped;
 import pokemon.model.Trainer;
 
+@ApplicationScoped
 public class TrainerRepository implements Repository<Trainer, UUID> {
-    private final Map<UUID, Trainer> trainers = new HashMap<>();
+    private Map<UUID, Trainer> trainers = new HashMap<>();
 
     @Override
     public Optional<Trainer> find(UUID id) {

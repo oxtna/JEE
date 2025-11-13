@@ -4,12 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import pokemon.model.Avatar;
 import pokemon.service.AvatarService;
 
+@ApplicationScoped
 public class AvatarController {
-    private final AvatarService service;
+    private AvatarService service;
 
+    public AvatarController() {}
+
+    @Inject
     public AvatarController(AvatarService service) {
         this.service = service;
     }

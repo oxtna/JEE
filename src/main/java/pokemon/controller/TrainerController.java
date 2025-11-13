@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-
-import jakarta.ws.rs.NotFoundException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import pokemon.api.GetTrainer;
 import pokemon.api.GetTrainers;
 import pokemon.api.PutTrainer;
 import pokemon.model.Trainer;
 import pokemon.service.TrainerService;
 
+@ApplicationScoped
 public class TrainerController {
-    private final TrainerService service;
+    private TrainerService service;
 
+    public TrainerController() {}
+
+    @Inject
     public TrainerController(TrainerService service) {
         this.service = service;
     }

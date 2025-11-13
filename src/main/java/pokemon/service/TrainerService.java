@@ -3,12 +3,18 @@ package pokemon.service;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import pokemon.model.Trainer;
 import pokemon.repository.TrainerRepository;
 
+@ApplicationScoped
 public class TrainerService {
-    private final TrainerRepository repository;
+    private TrainerRepository repository;
 
+    public TrainerService() {}
+
+    @Inject
     public TrainerService(TrainerRepository repository) {
         this.repository = repository;
     }
