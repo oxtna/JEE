@@ -43,30 +43,37 @@ public class StartupListener {
     public void init() {
         requestContextController.activate();
 
-        trainerService.create(new Trainer(
-                UUID.fromString("c337216a-0808-4984-bbd0-ced1fb68eb6a"), "Max",
-                LocalDate.now(), 10, new ArrayList<>()
-        ));
-        trainerService.create(new Trainer(
-                UUID.fromString("b9e880d8-959f-499d-85f9-f8a294f7471d"), "Tom",
-                LocalDate.now(), 20, new ArrayList<>()
-        ));
-        trainerService.create(new Trainer(
-                UUID.fromString("0332fd47-058e-4100-8a26-a2c839398188"), "Hugh",
-                LocalDate.now(), 15, new ArrayList<>()
-        ));
-        Trainer brendan = new Trainer(
-                UUID.fromString("8ace8e64-8b1f-4f39-9236-05bfa6f65355"), "Brendan",
-                LocalDate.now(), 5, new ArrayList<>()
-        );
         Region hoenn = new Region(UUID.randomUUID(), "Hoenn", 3, "Birch", new ArrayList<>());
-        Pokemon mudkip = new Pokemon(
-                UUID.randomUUID(), "Mudkip", List.of(PokemonType.WATER, PokemonType.GROUND), hoenn, brendan,
+        Region unova = new Region(UUID.randomUUID(), "Unova", 5, "Juniper", new ArrayList<>());
+        Pokemon p1 = new Pokemon(
+                UUID.randomUUID(), "Mudkip", List.of(PokemonType.WATER, PokemonType.GROUND), hoenn, null,
                 5, 10, 10, 10, 10, 10, 10
         );
-        trainerService.create(brendan);
+        Pokemon p2 = new Pokemon(
+                UUID.randomUUID(), "Seedot", List.of(PokemonType.GRASS), hoenn, null,
+                5, 10, 10, 10, 10, 10, 10
+        );
+        Pokemon p3 = new Pokemon(
+                UUID.randomUUID(), "Torchic", List.of(PokemonType.FIRE), hoenn, null,
+                5, 10, 10, 10, 10, 10, 10
+                );
+        Pokemon p4 = new Pokemon(
+                UUID.randomUUID(), "Snivy", List.of(PokemonType.GRASS), unova, null,
+                5, 10, 10, 10, 10, 10, 10
+        );
+        Pokemon p5 = new Pokemon(
+                UUID.randomUUID(), "Victini", List.of(PokemonType.PSYCHIC, PokemonType.FIRE), unova, null,
+                5, 10, 10, 10, 10, 10, 10
+        );
+        hoenn.setPokemon(List.of(p1, p2, p3));
+        unova.setPokemon(List.of(p4, p5));
         regionService.create(hoenn);
-        pokemonService.create(mudkip);
+        regionService.create(unova);
+        pokemonService.create(p1);
+        pokemonService.create(p2);
+        pokemonService.create(p3);
+        pokemonService.create(p4);
+        pokemonService.create(p5);
 
         requestContextController.deactivate();
     }

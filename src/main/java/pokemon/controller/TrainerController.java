@@ -15,17 +15,17 @@ import pokemon.service.TrainerService;
 
 @ApplicationScoped
 public class TrainerController {
-    private TrainerService service;
+    private TrainerService trainerService;
 
     public TrainerController() {}
 
     @Inject
-    public TrainerController(TrainerService service) {
-        this.service = service;
+    public TrainerController(TrainerService trainerService) {
+        this.trainerService = trainerService;
     }
 
     public GetTrainer getTrainer(UUID id) {
-        Optional<Trainer> trainer = service.find(id);
+        Optional<Trainer> trainer = trainerService.find(id);
         if (trainer.isEmpty()) {
             return null;
         }
@@ -38,7 +38,7 @@ public class TrainerController {
     }
 
     public GetTrainers getTrainers() {
-        Collection<Trainer> trainers = service.findAll();
+        Collection<Trainer> trainers = trainerService.findAll();
         GetTrainers response = new GetTrainers();
         response.setTrainers(trainers.stream().map(t -> {
             GetTrainer trainer = new GetTrainer();
@@ -51,7 +51,7 @@ public class TrainerController {
     }
 
     public void putTrainer(UUID uuid, PutTrainer trainer) {
-        service.create(new Trainer(
+        trainerService.create(new Trainer(
                 uuid, trainer.getName(), LocalDate.now(), 50, new ArrayList<>()
         ));
     }

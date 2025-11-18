@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+<ui:composition template="template.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{pokemonDetail.id}" required="true" />
+        <f:viewAction action="#{pokemonDetail.init()}" />
+    </f:metadata>
+    <ui:define name="header">Pokemon > Pokemon Detail</ui:define>
+    <ui:define name="content">
+        <h2>#{pokemonDetail.pokemon.name}</h2>
+        <p>Region: #{pokemonDetail.pokemon.region.name}</p>
+        <p>Trainer: #{pokemonDetail.pokemon.trainer != null ? pokemonDetail.pokemon.trainer.name : "[None]"}</p>
+        <p>Level: #{pokemonDetail.pokemon.level}</p>
+        <p>Types: #{pokemonDetail.pokemonTypes}</p>
+        <p>Hit Points: #{pokemonDetail.pokemon.hitPoints}</p>
+        <p>Attack: #{pokemonDetail.pokemon.attack}</p>
+        <p>Defence: #{pokemonDetail.pokemon.defence}</p>
+        <p>Special Attack: #{pokemonDetail.pokemon.specialAttack}</p>
+        <p>Special Defence: #{pokemonDetail.pokemon.specialDefence}</p>
+        <p>Speed: #{pokemonDetail.pokemon.speed}</p>
+    </ui:define>
+</ui:composition>
+</html>

@@ -6,10 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.context.ApplicationScoped;
 import pokemon.model.Avatar;
 
-@Dependent
+@ApplicationScoped
 public class AvatarService {
     public Optional<Avatar> find(UUID id) throws IOException {
         Avatar avatar = new Avatar(id);

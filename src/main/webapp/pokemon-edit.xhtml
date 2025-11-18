@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<ui:composition template="template.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{pokemonEdit.id}" required="true" />
+        <f:viewAction action="#{pokemonEdit.init()}" />
+    </f:metadata>
+    <ui:define name="header">Pokemon > Pokemon Edit</ui:define>
+    <ui:define name="content">
+        <h2>Edit Pokemon data</h2>
+        <h:form onreset="" enctype="multipart/form-data">
+            <div>
+                <h:outputLabel for="name" value="Name:" />
+                <h:inputText id="name" value="#{pokemonEdit.pokemon.name}" />
+            </div>
+            <div>
+                <h:outputLabel for="types" value="Types:" />
+                <h:selectManyListbox id="types"
+                                     value="#{pokemonEdit.pokemon.types}"
+                                     converter="pokemonTypeConverter"
+                                     size="10">
+                    <f:selectItems value="#{pokemonEdit.allPokemonTypes}"
+                                   var="type" itemValue="#{type}" itemLabel="#{type}" />
+                    <f:validateLength minimum="1" maximum="2" />
+                </h:selectManyListbox>
+            </div>
+            <div>
+                <h:outputLabel for="level" value="Level:" />
+                <h:inputText id="level" value="#{pokemonEdit.pokemon.level}" />
+            </div>
+            <div>
+                <h:outputLabel for="hitPoints" value="Hit Points:" />
+                <h:inputText id="hitPoints" value="#{pokemonEdit.pokemon.hitPoints}" />
+            </div>
+            <div>
+                <h:outputLabel for="attack" value="Attack:" />
+                <h:inputText id="attack" value="#{pokemonEdit.pokemon.attack}" />
+            </div>
+            <div>
+                <h:outputLabel for="defence" value="Defence:" />
+                <h:inputText id="defence" value="#{pokemonEdit.pokemon.defence}" />
+            </div>
+            <div>
+                <h:outputLabel for="specialAttack" value="Special Attack:" />
+                <h:inputText id="specialAttack" value="#{pokemonEdit.pokemon.specialAttack}" />
+            </div>
+            <div>
+                <h:outputLabel for="specialDefence" value="Special Defence:" />
+                <h:inputText id="specialDefence" value="#{pokemonEdit.pokemon.specialDefence}" />
+            </div>
+            <div>
+                <h:outputLabel for="speed" value="Speed:" />
+                <h:inputText id="speed" value="#{pokemonEdit.pokemon.speed}" />
+            </div>
+            <h:commandButton value="Update" action="#{pokemonEdit.saveAction()}" />
+            <h:commandButton value="Reset" type="reset" />
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

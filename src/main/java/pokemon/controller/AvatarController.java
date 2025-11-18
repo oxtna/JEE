@@ -11,24 +11,24 @@ import pokemon.service.AvatarService;
 
 @ApplicationScoped
 public class AvatarController {
-    private AvatarService service;
+    private AvatarService avatarService;
 
     public AvatarController() {}
 
     @Inject
-    public AvatarController(AvatarService service) {
-        this.service = service;
+    public AvatarController(AvatarService avatarService) {
+        this.avatarService = avatarService;
     }
 
     public Optional<Avatar> getAvatar(UUID id) throws IOException {
-        return service.find(id);
+        return avatarService.find(id);
     }
 
     public void putAvatar(UUID id, InputStream inputStream) throws IOException {
-        service.update(id, inputStream);
+        avatarService.update(id, inputStream);
     }
 
     public void deleteAvatar(UUID id) throws IOException {
-        service.delete(id);
+        avatarService.delete(id);
     }
 }

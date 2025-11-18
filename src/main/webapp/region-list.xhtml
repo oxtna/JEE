@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<ui:composition template="/template.xhtml">
+    <ui:define name="header">Pokemon > Region List</ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:dataTable value="#{regionList.regions}" var="region">
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{region.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+                    <h:link value="Details" outcome="region-detail.xhtml">
+                        <f:param name="id" value="#{region.id}" />
+                    </h:link>
+                    <h:commandButton value="Remove"
+                                     action="#{regionList.remove(region)}" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
