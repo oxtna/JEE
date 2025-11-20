@@ -1,39 +1,41 @@
 package pokemon.repository;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
-import java.util.*;
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import pokemon.entity.Region;
 
-@ApplicationScoped
+@Stateless
 public class RegionRepository implements Repository<Region, UUID> {
-    private final Map<UUID, Region> regions = new HashMap<>();
+    @PersistenceContext(unitName = "pokemonPU")
+    private EntityManager em;
 
     @Override
     public Optional<Region> find(UUID id) {
-        return Optional.ofNullable(regions.get(id));
+        return Optional.ofNullable(em.find(Region.class, id));
     }
 
     @Override
     public Collection<Region> findAll() {
-        return regions.values();
+        return em.createQuery("select r from Region r", Region.class).getResultList();
     }
 
     @Override
     public void create(Region region) {
-        if (regions.containsKey(region.getId())) {
-            throw new IllegalArgumentException("Region with this ID already exists");
-        }
-        regions.put(region.getId(), region);
+        em.persist(region);
     }
 
     @Override
     public void update(Region region) {
-        regions.put(region.getId(), region);
+        em.merge(region);
     }
 
     @Override
     public void delete(Region region) {
-        regions.remove(region.getId());
+        em.remove(region);
     }
 }

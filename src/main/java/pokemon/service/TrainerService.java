@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import pokemon.entity.Trainer;
 import pokemon.repository.TrainerRepository;
 
@@ -27,14 +28,17 @@ public class TrainerService {
         return repository.find(id);
     }
 
+    @Transactional
     public void create(Trainer trainer) {
         repository.create(trainer);
     }
 
+    @Transactional
     public void update(Trainer trainer) {
         repository.update(trainer);
     }
 
+    @Transactional
     public void delete(Trainer trainer) {
         repository.delete(trainer);
     }

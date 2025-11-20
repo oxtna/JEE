@@ -7,5 +7,15 @@
         <feature>cdi-4.0</feature>
         <feature>faces-4.0</feature>
         <feature>restfulWS-3.1</feature>
+        <feature>persistence-3.1</feature>
     </featureManager>
+
+    <dataSource id="H2DataSource" jndiName="jdbc/Pokemon">
+        <jdbcDriver libraryRef="h2Lib" />
+        <properties URL="jdbc:h2:mem:pokemon" user="sa" password="" />
+    </dataSource>
+
+    <library id="h2Lib">
+        <fileset dir="${shared.resource.dir}/h2" includes="*.jar" />
+    </library>
 </server>

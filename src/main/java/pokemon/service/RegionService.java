@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-import pokemon.entity.Pokemon;
+import jakarta.transaction.Transactional;
 import pokemon.entity.Region;
 import pokemon.repository.RegionRepository;
 
@@ -29,15 +29,18 @@ public class RegionService {
         return regionRepository.find(id);
     }
 
+    @Transactional
     public void create(Region region) {
         regionRepository.create(region);
     }
 
+    @Transactional
     public void update(Region region) {
         regionRepository.update(region);
     }
 
-    public void delete(Region region) {
-        regionRepository.delete(region);
+    @Transactional
+    public void delete(UUID id) {
+        regionRepository.delete(regionRepository.find(id).orElseThrow());
     }
 }

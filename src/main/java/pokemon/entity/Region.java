@@ -1,13 +1,20 @@
 package pokemon.entity;
 
+import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class Region {
+@Entity
+@Table(name = "regions")
+public class Region implements Serializable {
+    @Id
     private UUID id;
     private String name;
     private Integer generation;
     private String professor;
+    @OneToMany(mappedBy = "region", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Pokemon> pokemon;
 
     public Region() {}

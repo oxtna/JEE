@@ -66,8 +66,6 @@ public class StartupListener {
                 UUID.fromString("f55f3b21-f99a-4f2f-8a25-000000000000"), "Victini", List.of(PokemonType.PSYCHIC, PokemonType.FIRE), unova, null,
                 5, 10, 10, 10, 10, 10, 10
         );
-        hoenn.setPokemon(List.of(p1, p2, p3));
-        unova.setPokemon(List.of(p4, p5));
         regionService.create(hoenn);
         regionService.create(unova);
         pokemonService.create(p1);
@@ -75,6 +73,10 @@ public class StartupListener {
         pokemonService.create(p3);
         pokemonService.create(p4);
         pokemonService.create(p5);
+        hoenn.setPokemon(List.of(p1, p2, p3));
+        unova.setPokemon(List.of(p4, p5));
+        regionService.update(hoenn);
+        regionService.update(unova);
 
         requestContextController.deactivate();
     }

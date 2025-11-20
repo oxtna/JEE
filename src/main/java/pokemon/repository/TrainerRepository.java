@@ -1,39 +1,41 @@
 package pokemon.repository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.enterprise.context.ApplicationScoped;
+
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import pokemon.entity.Trainer;
 
-@ApplicationScoped
+@Stateless
 public class TrainerRepository implements Repository<Trainer, UUID> {
-    private Map<UUID, Trainer> trainers = new HashMap<>();
+    @PersistenceContext(unitName = "pokemonPU")
+    private EntityManager em;
 
     @Override
     public Optional<Trainer> find(UUID id) {
-        return Optional.ofNullable(trainers.get(id));
+        return Optional.ofNullable(em.find(Trainer.class, id));
     }
 
     @Override
     public Collection<Trainer> findAll() {
-        return trainers.values();
+        return em.createQuery("select t from Trainer t", Trainer.class).getResultList();
     }
 
     @Override
     public void create(Trainer trainer) {
-        trainers.put(trainer.getId(), trainer);
+        em.persist(trainer);
     }
 
     @Override
     public void update(Trainer trainer) {
-        trainers.put(trainer.getId(), trainer);
+        em.merge(trainer);
     }
 
     @Override
     public void delete(Trainer trainer) {
-        trainers.remove(trainer.getId());
+        em.remove(trainer);
     }
 }

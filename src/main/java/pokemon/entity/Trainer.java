@@ -1,15 +1,25 @@
 package pokemon.entity;
 
+import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public class Trainer {
+@Entity
+@Table(name = "trainers")
+public class Trainer implements Serializable {
+    @Id
     private UUID id;
     private String name;
+    @Column(name = "registration_date")
     private LocalDate registrationDate;
     private int money;
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.REMOVE)
     private List<Pokemon> team;
+
+    public Trainer() {}
 
     public Trainer(UUID id, String name, LocalDate registrationDate, int money, List<Pokemon> team) {
         this.id = id;

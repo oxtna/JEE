@@ -1,6 +1,8 @@
 package pokemon.entity;
 
-public enum PokemonType {
+import java.io.Serializable;
+
+public enum PokemonType implements Serializable {
     NORMAL,
     FIRE,
     WATER,

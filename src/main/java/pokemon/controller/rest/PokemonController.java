@@ -2,6 +2,7 @@ package pokemon.controller.rest;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -62,7 +63,7 @@ public class PokemonController {
                     uriInfo.getAbsolutePathBuilder().path(pokemonId.toString()).build().toString()
             );
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (IllegalArgumentException exc) {
+        } catch (TransactionalException exc) {
             throw new BadRequestException(exc);
         }
     }
@@ -86,7 +87,7 @@ public class PokemonController {
             pokemonService.createInRegion(regionId, pokemon);
             response.setHeader("Location", uriInfo.getAbsolutePathBuilder().build().toString());
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (IllegalArgumentException exc) {
+        } catch (TransactionalException exc) {
             throw new BadRequestException(exc);
         }
     }

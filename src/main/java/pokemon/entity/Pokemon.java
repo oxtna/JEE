@@ -1,13 +1,21 @@
 package pokemon.entity;
 
+import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class Pokemon {
+@Entity
+@Table(name = "pokemon")
+public class Pokemon implements Serializable {
+    @Id
     private UUID id;
     private String name;
     private List<PokemonType> types;
+    @ManyToOne
     private Region region;
+    @ManyToOne
     private Trainer trainer;
     private Integer level;
     private Integer hitPoints;

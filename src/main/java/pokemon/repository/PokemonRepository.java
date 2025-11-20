@@ -1,39 +1,41 @@
 package pokemon.repository;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
-import java.util.*;
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import pokemon.entity.Pokemon;
 
-@ApplicationScoped
+@Stateless
 public class PokemonRepository implements Repository<Pokemon, UUID> {
-    private final Map<UUID, Pokemon> pokemon = new HashMap<>();
+    @PersistenceContext(unitName = "pokemonPU")
+    private EntityManager em;
 
     @Override
     public Optional<Pokemon> find(UUID id) {
-        return Optional.ofNullable(pokemon.get(id));
+        return Optional.ofNullable(em.find(Pokemon.class, id));
     }
 
     @Override
     public Collection<Pokemon> findAll() {
-        return pokemon.values();
+        return em.createQuery("select p from Pokemon p", Pokemon.class).getResultList();
     }
 
     @Override
     public void create(Pokemon pokemon) {
-        if (this.pokemon.containsKey(pokemon.getId())) {
-            throw new IllegalArgumentException("Pokemon with this ID already exists");
-        }
-        this.pokemon.put(pokemon.getId(), pokemon);
+        em.persist(pokemon);
     }
 
     @Override
     public void update(Pokemon pokemon) {
-        this.pokemon.put(pokemon.getId(), pokemon);
+        em.merge(pokemon);
     }
 
     @Override
     public void delete(Pokemon pokemon) {
-        this.pokemon.remove(pokemon.getId());
+        em.remove(pokemon);
     }
 }

@@ -3,10 +3,13 @@ package pokemon.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
-import jakarta.ws.rs.NotFoundException;
+import jakarta.transaction.Transactional;
 import pokemon.entity.Pokemon;
 import pokemon.entity.Region;
 import pokemon.repository.PokemonRepository;
@@ -33,14 +36,17 @@ public class PokemonService {
         return pokemonRepository.find(id);
     }
 
+    @Transactional
     public void create(Pokemon pokemon) {
         pokemonRepository.create(pokemon);
     }
 
+    @Transactional
     public void update(Pokemon pokemon) {
         pokemonRepository.update(pokemon);
     }
 
+    @Transactional
     public void delete(UUID id) {
         pokemonRepository.delete(pokemonRepository.find(id).orElseThrow());
     }
@@ -63,6 +69,7 @@ public class PokemonService {
         return region.getPokemon();
     }
 
+    @Transactional
     public void createInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         region.setPokemon(Stream.concat(region.getPokemon().stream(), Stream.of(pokemon)).toList());
@@ -71,6 +78,7 @@ public class PokemonService {
         regionRepository.update(region);
     }
 
+    @Transactional
     public void updateInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         if (!pokemon.getRegion().getId().equals(region.getId())) {
@@ -79,6 +87,7 @@ public class PokemonService {
         pokemonRepository.update(pokemon);
     }
 
+    @Transactional
     public void deleteFromRegion(UUID regionId, UUID pokemonId) {
         Region region = regionRepository.find(regionId).orElseThrow();
         Pokemon pokemon = pokemonRepository.find(pokemonId).orElseThrow();
