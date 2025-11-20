@@ -3,11 +3,11 @@ package pokemon.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.*;
-import pokemon.model.Region;
+import pokemon.entity.Region;
 
 @ApplicationScoped
 public class RegionRepository implements Repository<Region, UUID> {
-    private Map<UUID, Region> regions = new HashMap<>();
+    private final Map<UUID, Region> regions = new HashMap<>();
 
     @Override
     public Optional<Region> find(UUID id) {
@@ -21,6 +21,9 @@ public class RegionRepository implements Repository<Region, UUID> {
 
     @Override
     public void create(Region region) {
+        if (regions.containsKey(region.getId())) {
+            throw new IllegalArgumentException("Region with this ID already exists");
+        }
         regions.put(region.getId(), region);
     }
 

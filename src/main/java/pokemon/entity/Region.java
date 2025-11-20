@@ -1,4 +1,4 @@
-package pokemon.model;
+package pokemon.entity;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,16 +6,26 @@ import java.util.UUID;
 public class Region {
     private UUID id;
     private String name;
-    private int generation;
+    private Integer generation;
     private String professor;
     private List<Pokemon> pokemon;
 
-    public Region(UUID id, String name, int generation, String professor, List<Pokemon> pokemon) {
+    public Region() {}
+
+    public Region(UUID id, String name, Integer generation, String professor, List<Pokemon> pokemon) {
         this.id = id;
         this.name = name;
         this.generation = generation;
         this.professor = professor;
         this.pokemon = pokemon;
+    }
+
+    public Region(Region other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.generation = other.generation;
+        this.professor = other.professor;
+        this.pokemon = other.pokemon;
     }
 
     public UUID getId() {
@@ -34,11 +44,11 @@ public class Region {
         this.name = name;
     }
 
-    public int getGeneration() {
+    public Integer getGeneration() {
         return generation;
     }
 
-    public void setGeneration(int generation) {
+    public void setGeneration(Integer generation) {
         this.generation = generation;
     }
 

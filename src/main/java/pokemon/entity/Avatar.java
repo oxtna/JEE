@@ -1,4 +1,4 @@
-package pokemon.model;
+package pokemon.entity;
 
 import java.nio.file.Path;
 import java.util.UUID;

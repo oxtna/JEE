@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletResponse;
-import pokemon.model.Pokemon;
-import pokemon.model.Region;
+import pokemon.entity.Pokemon;
+import pokemon.entity.Region;
 import pokemon.service.PokemonService;
 import pokemon.service.RegionService;
 
@@ -56,7 +56,7 @@ public class RegionDetail implements Serializable {
         }
         region.setPokemon(region.getPokemon().stream().filter(p -> p != pokemon).toList());
         regionService.update(region);
-        pokemonService.delete(pokemon);
+        pokemonService.delete(uuid);
         return "region-detail.xhtml?faces-redirect=true&includeViewParams=true";
     }
 }

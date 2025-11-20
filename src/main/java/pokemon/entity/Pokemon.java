@@ -1,4 +1,4 @@
-package pokemon.model;
+package pokemon.entity;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,16 +9,19 @@ public class Pokemon {
     private List<PokemonType> types;
     private Region region;
     private Trainer trainer;
-    private int level;
-    private int hitPoints;
-    private int attack;
-    private int defence;
-    private int specialAttack;
-    private int specialDefence;
-    private int speed;
+    private Integer level;
+    private Integer hitPoints;
+    private Integer attack;
+    private Integer defence;
+    private Integer specialAttack;
+    private Integer specialDefence;
+    private Integer speed;
 
-    public Pokemon(UUID id, String name, List<PokemonType> types, Region region, Trainer trainer, int level,
-                   int hitPoints, int attack, int defence, int specialAttack, int specialDefence, int speed) {
+    public Pokemon() {}
+
+    public Pokemon(UUID id, String name, List<PokemonType> types, Region region, Trainer trainer, Integer level,
+                   Integer hitPoints, Integer attack, Integer defence, Integer specialAttack, Integer specialDefence,
+                   Integer speed) {
         this.id = id;
         this.name = name;
         this.types = types;
@@ -31,6 +34,21 @@ public class Pokemon {
         this.specialAttack = specialAttack;
         this.specialDefence = specialDefence;
         this.speed = speed;
+    }
+
+    public Pokemon(Pokemon other) {
+        this.id = other.id;
+        this.name = other.name;
+        this.types = other.types;
+        this.region = other.region;
+        this.trainer = other.trainer;
+        this.level = other.level;
+        this.hitPoints = other.hitPoints;
+        this.attack = other.attack;
+        this.defence = other.defence;
+        this.specialAttack = other.specialAttack;
+        this.specialDefence = other.specialDefence;
+        this.speed = other.speed;
     }
 
     public UUID getId() {
@@ -73,59 +91,59 @@ public class Pokemon {
         this.trainer = trainer;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public int getHitPoints() {
+    public Integer getHitPoints() {
         return hitPoints;
     }
 
-    public void setHitPoints(int hitPoints) {
+    public void setHitPoints(Integer hitPoints) {
         this.hitPoints = hitPoints;
     }
 
-    public int getAttack() {
+    public Integer getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
+    public void setAttack(Integer attack) {
         this.attack = attack;
     }
 
-    public int getDefence() {
+    public Integer getDefence() {
         return defence;
     }
 
-    public void setDefence(int defence) {
+    public void setDefence(Integer defence) {
         this.defence = defence;
     }
 
-    public int getSpecialAttack() {
+    public Integer getSpecialAttack() {
         return specialAttack;
     }
 
-    public void setSpecialAttack(int specialAttack) {
+    public void setSpecialAttack(Integer specialAttack) {
         this.specialAttack = specialAttack;
     }
 
-    public int getSpecialDefence() {
+    public Integer getSpecialDefence() {
         return specialDefence;
     }
 
-    public void setSpecialDefence(int specialDefence) {
+    public void setSpecialDefence(Integer specialDefence) {
         this.specialDefence = specialDefence;
     }
 
-    public int getSpeed() {
+    public Integer getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(Integer speed) {
         this.speed = speed;
     }
 }

@@ -1,4 +1,4 @@
-package pokemon.controller;
+package pokemon.controller.simple;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import pokemon.model.Avatar;
+import pokemon.entity.Avatar;
 import pokemon.service.AvatarService;
 
 @ApplicationScoped

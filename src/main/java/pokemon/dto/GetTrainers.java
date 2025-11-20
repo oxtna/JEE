@@ -1,4 +1,4 @@
-package pokemon.api;
+package pokemon.dto;
 
 import java.util.List;
 

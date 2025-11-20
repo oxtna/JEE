@@ -14,13 +14,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import pokemon.api.GetTrainer;
-import pokemon.api.PutTrainer;
-import pokemon.controller.AvatarController;
-import pokemon.controller.TrainerController;
-import pokemon.model.Avatar;
+import pokemon.dto.GetTrainer;
+import pokemon.dto.PutTrainer;
+import pokemon.controller.simple.AvatarController;
+import pokemon.controller.simple.TrainerController;
+import pokemon.entity.Avatar;
 
-@WebServlet(name = "ApiServlet", urlPatterns = {"/api/*"})
+@WebServlet(name = "ApiServlet", urlPatterns = {"/dto/*"})
 @MultipartConfig(maxFileSize = 16 * 1024 * 1024)
 public class ApiServlet extends HttpServlet {
     private TrainerController trainerController;
@@ -79,7 +79,7 @@ public class ApiServlet extends HttpServlet {
         if (path.matches(Patterns.TRAINER.pattern())) {
             UUID uuid = parseUuid(Patterns.TRAINER, path);
             trainerController.putTrainer(uuid, jsonb.fromJson(request.getReader(), PutTrainer.class));
-            response.addHeader("Location", "/api/trainers/" + uuid);
+            response.addHeader("Location", "/dto/trainers/" + uuid);
         } else if (path.matches(Patterns.AVATAR.pattern())) {
             UUID uuid = parseUuid(Patterns.AVATAR, path);
             avatarController.putAvatar(uuid, request.getPart("avatar").getInputStream());

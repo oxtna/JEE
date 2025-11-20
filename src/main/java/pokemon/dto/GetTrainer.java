@@ -1,4 +1,4 @@
-package pokemon.api;
+package pokemon.dto;
 
 import java.time.LocalDate;
 import java.util.UUID;

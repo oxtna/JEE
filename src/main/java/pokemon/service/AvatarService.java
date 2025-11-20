@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
-import pokemon.model.Avatar;
+import pokemon.entity.Avatar;
 
 @ApplicationScoped
 public class AvatarService {

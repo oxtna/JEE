@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletResponse;
-import pokemon.model.Pokemon;
+import pokemon.entity.Pokemon;
 import pokemon.service.PokemonService;
 
 @Named

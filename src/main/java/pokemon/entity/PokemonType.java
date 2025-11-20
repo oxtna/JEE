@@ -1,4 +1,4 @@
-package pokemon.model;
+package pokemon.entity;
 
 public enum PokemonType {
     NORMAL,

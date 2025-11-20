@@ -6,7 +6,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
 import jakarta.inject.Inject;
-import pokemon.model.Region;
+import pokemon.entity.Region;
 import pokemon.service.RegionService;
 import java.io.Serializable;
 import java.util.UUID;

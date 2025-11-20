@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
-import pokemon.model.Trainer;
+import pokemon.entity.Trainer;
 
 @ApplicationScoped
 public class TrainerRepository implements Repository<Trainer, UUID> {

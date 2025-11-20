@@ -5,7 +5,7 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
-import pokemon.model.PokemonType;
+import pokemon.entity.PokemonType;
 import java.io.Serializable;
 
 @Dependent

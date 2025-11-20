@@ -1,4 +1,4 @@
-package pokemon.controller;
+package pokemon.controller.simple;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import pokemon.api.GetTrainer;
-import pokemon.api.GetTrainers;
-import pokemon.api.PutTrainer;
-import pokemon.model.Trainer;
+import pokemon.dto.GetTrainer;
+import pokemon.dto.GetTrainers;
+import pokemon.dto.PutTrainer;
+import pokemon.entity.Trainer;
 import pokemon.service.TrainerService;
 
 @ApplicationScoped

@@ -3,11 +3,11 @@ package pokemon.repository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.*;
-import pokemon.model.Pokemon;
+import pokemon.entity.Pokemon;
 
 @ApplicationScoped
 public class PokemonRepository implements Repository<Pokemon, UUID> {
-    private Map<UUID, Pokemon> pokemon = new HashMap<>();
+    private final Map<UUID, Pokemon> pokemon = new HashMap<>();
 
     @Override
     public Optional<Pokemon> find(UUID id) {
@@ -21,6 +21,9 @@ public class PokemonRepository implements Repository<Pokemon, UUID> {
 
     @Override
     public void create(Pokemon pokemon) {
+        if (this.pokemon.containsKey(pokemon.getId())) {
+            throw new IllegalArgumentException("Pokemon with this ID already exists");
+        }
         this.pokemon.put(pokemon.getId(), pokemon);
     }
 

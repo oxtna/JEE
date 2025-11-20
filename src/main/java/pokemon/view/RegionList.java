@@ -5,8 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
-import pokemon.model.Pokemon;
-import pokemon.model.Region;
+import pokemon.entity.Pokemon;
+import pokemon.entity.Region;
 import pokemon.service.PokemonService;
 import pokemon.service.RegionService;
 
@@ -25,7 +25,7 @@ public class RegionList implements Serializable {
     public String remove(Region region) {
         regionService.delete(region);
         for  (Pokemon pokemon : region.getPokemon()) {
-            pokemonService.delete(pokemon);
+            pokemonService.delete(pokemon.getId());
         }
         return null;
     }

@@ -1,7 +1,7 @@
 package pokemon.listener;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,10 +9,9 @@ import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.control.RequestContextController;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-import pokemon.model.Pokemon;
-import pokemon.model.PokemonType;
-import pokemon.model.Region;
-import pokemon.model.Trainer;
+import pokemon.entity.Pokemon;
+import pokemon.entity.PokemonType;
+import pokemon.entity.Region;
 import pokemon.service.AvatarService;
 import pokemon.service.PokemonService;
 import pokemon.service.RegionService;
@@ -43,26 +42,28 @@ public class StartupListener {
     public void init() {
         requestContextController.activate();
 
-        Region hoenn = new Region(UUID.randomUUID(), "Hoenn", 3, "Birch", new ArrayList<>());
-        Region unova = new Region(UUID.randomUUID(), "Unova", 5, "Juniper", new ArrayList<>());
+        Region hoenn = new Region(UUID.fromString("bdbb750b-4d78-4da2-945d-c90029afb9e0"), "Hoenn",
+                3, "Birch", new ArrayList<>());
+        Region unova = new Region(UUID.fromString("bdbb750b-4d78-4da2-945d-000000000000"), "Unova",
+                5, "Juniper", new ArrayList<>());
         Pokemon p1 = new Pokemon(
-                UUID.randomUUID(), "Mudkip", List.of(PokemonType.WATER, PokemonType.GROUND), hoenn, null,
+                UUID.fromString("e6ec3642-a42d-4496-a7ec-80b7c7401c23"), "Mudkip", List.of(PokemonType.WATER, PokemonType.GROUND), hoenn, null,
                 5, 10, 10, 10, 10, 10, 10
         );
         Pokemon p2 = new Pokemon(
-                UUID.randomUUID(), "Seedot", List.of(PokemonType.GRASS), hoenn, null,
+                UUID.fromString("bbebb10e-0e06-4ec5-8a01-ee10b65b570e"), "Seedot", List.of(PokemonType.GRASS), hoenn, null,
                 5, 10, 10, 10, 10, 10, 10
         );
         Pokemon p3 = new Pokemon(
-                UUID.randomUUID(), "Torchic", List.of(PokemonType.FIRE), hoenn, null,
+                UUID.fromString("ec229cf7-193e-4754-89e5-6820e0b8f640"), "Torchic", List.of(PokemonType.FIRE), hoenn, null,
                 5, 10, 10, 10, 10, 10, 10
                 );
         Pokemon p4 = new Pokemon(
-                UUID.randomUUID(), "Snivy", List.of(PokemonType.GRASS), unova, null,
+                UUID.fromString("f55f3b21-f99a-4f2f-8a25-b5d575c9854e"), "Snivy", List.of(PokemonType.GRASS), unova, null,
                 5, 10, 10, 10, 10, 10, 10
         );
         Pokemon p5 = new Pokemon(
-                UUID.randomUUID(), "Victini", List.of(PokemonType.PSYCHIC, PokemonType.FIRE), unova, null,
+                UUID.fromString("f55f3b21-f99a-4f2f-8a25-000000000000"), "Victini", List.of(PokemonType.PSYCHIC, PokemonType.FIRE), unova, null,
                 5, 10, 10, 10, 10, 10, 10
         );
         hoenn.setPokemon(List.of(p1, p2, p3));

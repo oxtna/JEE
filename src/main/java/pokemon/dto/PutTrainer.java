@@ -1,4 +1,4 @@
-package pokemon.api;
+package pokemon.dto;
 
 public class PutTrainer {
     private String name;

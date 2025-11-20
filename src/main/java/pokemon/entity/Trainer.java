@@ -1,4 +1,4 @@
-package pokemon.model;
+package pokemon.entity;
 
 import java.time.LocalDate;
 import java.util.List;

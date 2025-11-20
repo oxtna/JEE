@@ -1,0 +1,116 @@
+### REGIONS — LIST ALL
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions
+Accept: application/json
+
+
+### REGIONS — GET ONE REGION
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-000000000000
+Accept: application/json
+
+
+### REGIONS — CREATE REGION
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions
+Content-Type: application/json
+
+{
+  "name": "Kanto",
+  "generation": 1,
+  "professor": "Oak"
+}
+
+
+### REGIONS — CREATE REGION HERE
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+Content-Type: application/json
+
+{
+  "name": "Johto",
+  "generation": 2,
+  "professor": "Eml"
+}
+
+
+### REGIONS - GET NEW REGION
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+Accept: application/json
+
+
+### REGIONS — PATCH REGION
+PATCH http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+Content-Type: application/json
+
+{
+  "professor": "Elm"
+}
+
+
+### REGIONS — DELETE REGION
+DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+
+
+### POKEMON — GET ALL POKEMON
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/pokemon
+Accept: application/json
+
+
+### POKEMON — GET POKEMON OF REGION
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon
+Accept: application/json
+
+
+### POKEMON — GET ONE POKEMON
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/ec229cf7-193e-4754-89e5-6820e0b8f640
+Accept: application/json
+
+
+### POKEMON — CREATE POKEMON IN REGION
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon
+Content-Type: application/json
+
+{
+  "name": "Raichu",
+  "types": ["ELECTRIC"],
+  "level": 20,
+  "hitPoints": 100,
+  "attack": 20,
+  "defence": 20,
+  "specialAttack": 30,
+  "specialDefence": 30,
+  "speed": 40
+}
+
+
+### POKEMON — CREATE POKEMON HERE
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+Content-Type: application/json
+
+{
+  "name": "Pikachu",
+  "types": ["ELECTRIC"],
+  "level": 10,
+  "hitPoints": 50,
+  "attack": 10,
+  "defence": 10,
+  "specialAttack": 15,
+  "specialDefence": 15,
+  "speed": 20
+}
+
+
+### POKEMON - GET NEW POKEMON
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+Accept: application/json
+
+
+### POKEMON — PATCH POKEMON
+PATCH http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+Content-Type: application/json
+
+{
+  "hitPoints": 40,
+  "specialDefence": 12
+}
+
+
+### POKEMON — DELETE POKEMON
+DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
