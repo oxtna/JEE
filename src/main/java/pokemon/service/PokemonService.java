@@ -1,6 +1,7 @@
 package pokemon.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
 import java.util.Collection;
@@ -9,23 +10,28 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import jakarta.transaction.Transactional;
 import pokemon.entity.Pokemon;
 import pokemon.entity.Region;
+import pokemon.entity.Trainer;
 import pokemon.repository.PokemonRepository;
 import pokemon.repository.RegionRepository;
+import pokemon.repository.TrainerRepository;
 
-@ApplicationScoped
+@LocalBean
+@Stateless
 public class PokemonService {
     private PokemonRepository pokemonRepository;
     private RegionRepository regionRepository;
+    private TrainerRepository trainerRepository;
 
     public PokemonService() {}
 
     @Inject
-    public PokemonService(PokemonRepository pokemonRepository, RegionRepository regionRepository) {
+    public PokemonService(PokemonRepository pokemonRepository, RegionRepository regionRepository,
+                          TrainerRepository trainerRepository) {
         this.pokemonRepository = pokemonRepository;
         this.regionRepository = regionRepository;
+        this.trainerRepository = trainerRepository;
     }
 
     public Collection<Pokemon> findAll() {
@@ -36,40 +42,45 @@ public class PokemonService {
         return pokemonRepository.find(id);
     }
 
-    @Transactional
+    public Collection<Pokemon> findAllByLogin(String trainerLogin) {
+        return pokemonRepository.findAllByLogin(trainerLogin);
+    }
+
     public void create(Pokemon pokemon) {
         pokemonRepository.create(pokemon);
     }
 
-    @Transactional
     public void update(Pokemon pokemon) {
         pokemonRepository.update(pokemon);
     }
 
-    @Transactional
     public void delete(UUID id) {
         pokemonRepository.delete(pokemonRepository.find(id).orElseThrow());
     }
 
-    public Optional<Pokemon> findInRegion(UUID regionId, UUID pokemonId) {
-        try {
-            Region region = regionRepository.find(regionId).orElseThrow();
-            Pokemon pokemon = pokemonRepository.find(pokemonId).orElseThrow();
-            if (!pokemon.getRegion().getId().equals(region.getId())) {
-                return Optional.empty();
-            }
-            return Optional.of(pokemon);
-        } catch (NoSuchElementException exc) {
-            return Optional.empty();
-        }
-    }
-
-    public Collection<Pokemon> findAllInRegion(UUID regionId) {
+    public Collection<Pokemon> findAllByRegion(UUID regionId) {
         Region region = regionRepository.find(regionId).orElseThrow();
         return region.getPokemon();
     }
 
-    @Transactional
+    public Optional<Pokemon> findInRegion(UUID regionID, UUID pokemonId) {
+        Region region = regionRepository.find(regionID).orElseThrow();
+        Pokemon pokemon = pokemonRepository.find(pokemonId).orElseThrow();
+        if (region.getPokemon().contains(pokemon)) {
+            return Optional.of(pokemon);
+        }
+        return Optional.empty();
+    }
+
+    public Collection<Pokemon> findAllInRegionByLogin(UUID regionId, String trainerLogin) {
+        Region region = regionRepository.find(regionId).orElseThrow();
+        return region.getPokemon()
+                .stream()
+                .filter(pokemon -> pokemon.getTrainer() != null
+                        && pokemon.getTrainer().getLogin().equals(trainerLogin))
+                .toList();
+    }
+
     public void createInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         region.setPokemon(Stream.concat(region.getPokemon().stream(), Stream.of(pokemon)).toList());
@@ -78,7 +89,6 @@ public class PokemonService {
         regionRepository.update(region);
     }
 
-    @Transactional
     public void updateInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         if (!pokemon.getRegion().getId().equals(region.getId())) {
@@ -87,7 +97,6 @@ public class PokemonService {
         pokemonRepository.update(pokemon);
     }
 
-    @Transactional
     public void deleteFromRegion(UUID regionId, UUID pokemonId) {
         Region region = regionRepository.find(regionId).orElseThrow();
         Pokemon pokemon = pokemonRepository.find(pokemonId).orElseThrow();

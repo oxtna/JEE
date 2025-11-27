@@ -12,6 +12,10 @@ public class Pokemon implements Serializable {
     @Id
     private UUID id;
     private String name;
+    @ElementCollection(targetClass = PokemonType.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "pokemon_types", joinColumns = @JoinColumn(name = "pokemon_id"))
+    @Column(name = "types", nullable = false)
     private List<PokemonType> types;
     @ManyToOne
     private Region region;

@@ -1,16 +1,33 @@
+### TRAINER REGISTRATION
+# @no-cookie-jar
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/trainer
+Content-Type: application/json
+
+{
+  "login": "rafal",
+  "password": "1",
+  "name": "Rafal"
+}
+
 ### REGIONS — LIST ALL
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions
 Accept: application/json
+Authorization: Basic rafal 1
 
 
 ### REGIONS — GET ONE REGION
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-000000000000
 Accept: application/json
+Authorization: Basic rafal 1
 
 
 ### REGIONS — CREATE REGION
+# @no-cookie-jar
 PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions
 Content-Type: application/json
+Authorization: Basic admin-service admin
 
 {
   "name": "Kanto",
@@ -20,8 +37,10 @@ Content-Type: application/json
 
 
 ### REGIONS — CREATE REGION HERE
+# @no-cookie-jar
 PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
 Content-Type: application/json
+Authorization: Basic admin-service admin
 
 {
   "name": "Johto",
@@ -31,13 +50,17 @@ Content-Type: application/json
 
 
 ### REGIONS - GET NEW REGION
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
 Accept: application/json
+Authorization: Basic admin-service admin
 
 
 ### REGIONS — PATCH REGION
+# @no-cookie-jar
 PATCH http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
 Content-Type: application/json
+Authorization: Basic admin-service admin
 
 {
   "professor": "Elm"
@@ -45,27 +68,42 @@ Content-Type: application/json
 
 
 ### REGIONS — DELETE REGION
+# @no-cookie-jar
 DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+Authorization: Basic rafal 1
+
+
+### REGIONS — DELETE REGION
+# @no-cookie-jar
+DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/00000000-aaaa-bbbb-cccc-000000000000
+Authorization: Basic admin-service admin
 
 
 ### POKEMON — GET ALL POKEMON
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/pokemon
 Accept: application/json
+Authorization: Basic rafal 1
 
 
 ### POKEMON — GET POKEMON OF REGION
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon
 Accept: application/json
+Authorization: Basic rafal 1
 
 
 ### POKEMON — GET ONE POKEMON
+# @no-cookie-jar
 GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/ec229cf7-193e-4754-89e5-6820e0b8f640
 Accept: application/json
-
+Authorization: Basic rafal 1
 
 ### POKEMON — CREATE POKEMON IN REGION
+# @no-cookie-jar
 PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon
 Content-Type: application/json
+Authorization: Basic rafal 1
 
 {
   "name": "Raichu",
@@ -79,32 +117,36 @@ Content-Type: application/json
   "speed": 40
 }
 
-
-### POKEMON — CREATE POKEMON HERE
-PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+### POKEMON — CREATE POKEMON IN REGION
+# @no-cookie-jar
+PUT http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon
 Content-Type: application/json
+Authorization: Basic rafal 1
 
 {
-  "name": "Pikachu",
+  "name": "Raichu",
   "types": ["ELECTRIC"],
-  "level": 10,
-  "hitPoints": 50,
-  "attack": 10,
-  "defence": 10,
-  "specialAttack": 15,
-  "specialDefence": 15,
-  "speed": 20
+  "level": 20,
+  "hitPoints": 100,
+  "attack": 20,
+  "defence": 20,
+  "specialAttack": 30,
+  "specialDefence": 30,
+  "speed": 40
 }
 
-
 ### POKEMON - GET NEW POKEMON
-GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+# @no-cookie-jar
+GET http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/f3f64e7f-7b27-4c8c-98f8-64f7bbd2ba51
 Accept: application/json
+Authorization: Basic rafal 1
 
 
 ### POKEMON — PATCH POKEMON
-PATCH http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+# @no-cookie-jar
+PATCH http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/068bede3-f095-4267-9e3f-2261de2feb82
 Content-Type: application/json
+Authorization: Basic rafal 1
 
 {
   "hitPoints": 40,
@@ -113,4 +155,6 @@ Content-Type: application/json
 
 
 ### POKEMON — DELETE POKEMON
-DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/12345678-aaaa-aaaa-aaaa-000000000000
+# @no-cookie-jar
+DELETE http://localhost:9080/pokemon-1.0-SNAPSHOT/api/regions/bdbb750b-4d78-4da2-945d-c90029afb9e0/pokemon/068bede3-f095-4267-9e3f-2261de2feb82
+Authorization: Basic rafal 1

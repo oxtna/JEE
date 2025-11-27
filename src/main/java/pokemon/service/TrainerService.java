@@ -3,21 +3,26 @@ package pokemon.service;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.enterprise.context.ApplicationScoped;
+
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import pokemon.entity.Trainer;
 import pokemon.repository.TrainerRepository;
 
-@ApplicationScoped
+@LocalBean
+@Stateless
 public class TrainerService {
     private TrainerRepository repository;
+    private Pbkdf2PasswordHash passwordHash;
 
     public TrainerService() {}
 
     @Inject
-    public TrainerService(TrainerRepository repository) {
+    public TrainerService(TrainerRepository repository, Pbkdf2PasswordHash passwordHash) {
         this.repository = repository;
+        this.passwordHash = passwordHash;
     }
 
     public Collection<Trainer> findAll() {
@@ -28,18 +33,24 @@ public class TrainerService {
         return repository.find(id);
     }
 
-    @Transactional
+    public Optional<Trainer> findByLogin(String login) {
+        return repository.findByLogin(login);
+    }
+
+    public Optional<Trainer> findByName(String name) {
+        return repository.findByName(name);
+    }
+
     public void create(Trainer trainer) {
+        trainer.setPassword(passwordHash.generate(trainer.getPassword().toCharArray()));
         repository.create(trainer);
     }
 
-    @Transactional
     public void update(Trainer trainer) {
         repository.update(trainer);
     }
 
-    @Transactional
-    public void delete(Trainer trainer) {
-        repository.delete(trainer);
+    public void delete(UUID id) {
+        repository.delete(repository.find(id).orElseThrow());
     }
 }

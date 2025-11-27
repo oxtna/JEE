@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pokemon.entity.Pokemon;
 
-@Stateless
+@Dependent
 public class PokemonRepository implements Repository<Pokemon, UUID> {
     @PersistenceContext(unitName = "pokemonPU")
     private EntityManager em;
@@ -22,6 +22,12 @@ public class PokemonRepository implements Repository<Pokemon, UUID> {
     @Override
     public Collection<Pokemon> findAll() {
         return em.createQuery("select p from Pokemon p", Pokemon.class).getResultList();
+    }
+
+    public Collection<Pokemon> findAllByLogin(String trainerLogin) {
+        return em.createQuery("select p from Pokemon p where p.trainer.login = :trainerLogin", Pokemon.class)
+                .setParameter("trainerLogin", trainerLogin)
+                .getResultList();
     }
 
     @Override

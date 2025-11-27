@@ -6,10 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.enterprise.context.ApplicationScoped;
+
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import pokemon.entity.Avatar;
 
-@ApplicationScoped
+@LocalBean
+@Stateless
 public class AvatarService {
     public Optional<Avatar> find(UUID id) throws IOException {
         Avatar avatar = new Avatar(id);

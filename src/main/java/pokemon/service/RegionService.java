@@ -1,16 +1,17 @@
 package pokemon.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.transaction.Transactional;
 import pokemon.entity.Region;
 import pokemon.repository.RegionRepository;
 
-@ApplicationScoped
+@LocalBean
+@Stateless
 public class RegionService {
     private RegionRepository regionRepository;
 
@@ -29,17 +30,14 @@ public class RegionService {
         return regionRepository.find(id);
     }
 
-    @Transactional
     public void create(Region region) {
         regionRepository.create(region);
     }
 
-    @Transactional
     public void update(Region region) {
         regionRepository.update(region);
     }
 
-    @Transactional
     public void delete(UUID id) {
         regionRepository.delete(regionRepository.find(id).orElseThrow());
     }

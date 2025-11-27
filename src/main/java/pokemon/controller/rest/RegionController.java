@@ -1,5 +1,6 @@
 package pokemon.controller.rest;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.TransactionalException;
@@ -32,6 +33,7 @@ public class RegionController {
 
     @GET
     @Path("/regions")
+    @RolesAllowed({"ADMIN", "NORMAL"})
     @Produces(MediaType.APPLICATION_JSON)
     public GetRegions getRegions() {
         return new DtoConverter.GetRegionsFunction().apply(regionService.findAll());
@@ -39,6 +41,7 @@ public class RegionController {
 
     @PUT
     @Path("/regions")
+    @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putRegions(PutRegion putRegion) {
         try {
@@ -53,6 +56,7 @@ public class RegionController {
 
     @GET
     @Path("/regions/{id}")
+    @RolesAllowed({"ADMIN", "NORMAL"})
     @Produces(MediaType.APPLICATION_JSON)
     public GetRegion getRegion(@PathParam("id") UUID id) {
         return regionService.find(id).map(new DtoConverter.GetRegionFunction()).orElseThrow(NotFoundException::new);
@@ -60,6 +64,7 @@ public class RegionController {
 
     @PUT
     @Path("/regions/{id}")
+    @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putRegion(@PathParam("id") UUID id, PutRegion putRegion) {
         try {
@@ -73,6 +78,7 @@ public class RegionController {
 
     @PATCH
     @Path("/regions/{id}")
+    @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     public void patchRegion(@PathParam("id") UUID id, PatchRegion patchRegion) {
         regionService.find(id).ifPresentOrElse(
@@ -87,6 +93,7 @@ public class RegionController {
 
     @DELETE
     @Path("/regions/{id}")
+    @RolesAllowed("ADMIN")
     public void deleteRegion(@PathParam("id") UUID id) {
         regionService.delete(id);
     }

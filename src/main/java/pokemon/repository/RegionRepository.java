@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pokemon.entity.Region;
 
-@Stateless
+@Dependent
 public class RegionRepository implements Repository<Region, UUID> {
     @PersistenceContext(unitName = "pokemonPU")
     private EntityManager em;

@@ -1,16 +1,14 @@
 package pokemon.dto;
 
-public class PutTrainer {
+public class GetPassword {
     private String login;
     private String password;
-    private String name;
 
-    public PutTrainer() {}
+    public GetPassword() {}
 
-    public PutTrainer(String login, String password, String name) {
+    public GetPassword(String login, String password) {
         this.login = login;
         this.password = password;
-        this.name = name;
     }
 
     public String getLogin() {
@@ -27,13 +25,5 @@ public class PutTrainer {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

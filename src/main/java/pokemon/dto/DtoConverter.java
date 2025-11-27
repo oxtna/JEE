@@ -2,6 +2,7 @@ package pokemon.dto;
 
 import pokemon.entity.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,60 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class DtoConverter {
+    public static class GetTrainerFunction implements Function<Trainer, GetTrainer> {
+        @Override
+        public GetTrainer apply(Trainer trainer) {
+            return new GetTrainer(
+                    trainer.getId(),
+                    trainer.getName(),
+                    trainer.getRegistrationDate(),
+                    trainer.getMoney(),
+                    trainer.getTeam() != null ?
+                            trainer.getTeam()
+                                    .stream()
+                                    .map(p -> new GetTrainer.Pokemon(p.getId(), p.getName()))
+                                    .toList() : List.of()
+            );
+        }
+    }
+    public static class GetTrainersFunction implements Function<Collection<Trainer>, GetTrainers> {
+        @Override
+        public GetTrainers apply(Collection<Trainer> trainers) {
+            return new GetTrainers(
+                    trainers.stream()
+                            .map(trainer -> new GetTrainers.Trainer(trainer.getId(), trainer.getName()))
+                            .toList()
+            );
+        }
+    }
+    public static class PutTrainerFunction implements BiFunction<UUID, PutTrainer, Trainer> {
+        @Override
+        public Trainer apply(UUID id, PutTrainer putTrainer) {
+            return new Trainer(
+                    id,
+                    putTrainer.getLogin(),
+                    putTrainer.getPassword(),
+                    TrainerRole.NORMAL,
+                    putTrainer.getName(),
+                    LocalDate.now(),
+                    0,
+                    List.of()
+            );
+        }
+    }
+    public static class PatchTrainerFunction implements BiFunction<Trainer, PatchTrainer, Trainer> {
+        @Override
+        public Trainer apply(Trainer trainer, PatchTrainer patchTrainer) {
+            Trainer patchedTrainer = new Trainer(trainer);
+            if (patchTrainer.getName() != null) {
+                patchedTrainer.setName(patchTrainer.getName());
+            }
+            if (patchTrainer.getMoney() != null) {
+                patchedTrainer.setMoney(patchTrainer.getMoney());
+            }
+            return patchedTrainer;
+        }
+    }
     public static class GetPokemonFunction implements Function<Pokemon, GetPokemon> {
         @Override
         public GetPokemon apply(Pokemon pokemon) {
@@ -110,7 +165,7 @@ public class DtoConverter {
                             region.getPokemon()
                                     .stream()
                                     .map(p -> new GetRegion.Pokemon(p.getId(), p.getName()))
-                                    .toList() : null
+                                    .toList() : List.of()
             );
         }
     }
