@@ -2,6 +2,7 @@ package pokemon.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import pokemon.entity.Avatar;
 
 @LocalBean
 @Stateless
-public class AvatarService {
+public class AvatarService implements Serializable {
     public Optional<Avatar> find(UUID id) throws IOException {
         Avatar avatar = new Avatar(id);
         Path path = avatar.getPath();

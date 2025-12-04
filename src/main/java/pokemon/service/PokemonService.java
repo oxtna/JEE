@@ -4,6 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import pokemon.repository.TrainerRepository;
 
 @LocalBean
 @Stateless
-public class PokemonService {
+public class PokemonService implements Serializable {
     private PokemonRepository pokemonRepository;
     private RegionRepository regionRepository;
     private TrainerRepository trainerRepository;

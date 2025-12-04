@@ -35,7 +35,7 @@ public class PokemonEdit implements Serializable {
 
     public String saveAction() {
         pokemonService.update(pokemon);
-        return "pokemon-edit.xhtml?faces-redirect=true&includeViewParams=true";
+        return "pokemon-details.xhtml?faces-redirect=true&includeViewParams=true";
     }
 
     public String getId() {

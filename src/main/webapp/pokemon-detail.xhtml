@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core">
-<ui:composition template="template.xhtml">
+<ui:composition template="/template.xhtml">
     <f:metadata>
         <f:viewParam name="id" value="#{pokemonDetail.id}" required="true" />
         <f:viewAction action="#{pokemonDetail.init()}" />

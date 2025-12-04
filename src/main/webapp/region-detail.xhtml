@@ -4,7 +4,7 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:f="jakarta.faces.core"
       xmlns:h="jakarta.faces.html">
-<ui:composition template="template.xhtml">
+<ui:composition template="/template.xhtml">
     <f:metadata>
         <f:viewParam name="id" value="#{regionDetail.id}" required="true" />
         <f:viewAction action="#{regionDetail.init()}" />

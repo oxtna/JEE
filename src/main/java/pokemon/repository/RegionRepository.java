@@ -19,6 +19,11 @@ public class RegionRepository implements Repository<Region, UUID> {
         return Optional.ofNullable(em.find(Region.class, id));
     }
 
+    public Optional<Region> findByName(String name) {
+        return Optional.of(em.createQuery("select r from Region r where r.name = :name", Region.class)
+                .setParameter("name", name).getSingleResult());
+    }
+
     @Override
     public Collection<Region> findAll() {
         return em.createQuery("select r from Region r", Region.class).getResultList();

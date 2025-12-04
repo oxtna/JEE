@@ -3,6 +3,8 @@ package pokemon.service;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,7 +14,7 @@ import pokemon.repository.RegionRepository;
 
 @LocalBean
 @Stateless
-public class RegionService {
+public class RegionService implements Serializable {
     private RegionRepository regionRepository;
 
     public RegionService() {}
@@ -28,6 +30,10 @@ public class RegionService {
 
     public Optional<Region> find(UUID id) {
         return regionRepository.find(id);
+    }
+
+    public Optional<Region> findByName(String name) {
+        return regionRepository.findByName(name);
     }
 
     public void create(Region region) {

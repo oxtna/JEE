@@ -1,5 +1,6 @@
 package pokemon.service;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import pokemon.repository.TrainerRepository;
 
 @LocalBean
 @Stateless
-public class TrainerService {
+public class TrainerService implements Serializable {
     private TrainerRepository repository;
     private Pbkdf2PasswordHash passwordHash;
 
