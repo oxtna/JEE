@@ -4,6 +4,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.UUID;
@@ -16,6 +17,8 @@ import pokemon.service.PokemonService;
 public class PokemonDetail implements Serializable {
     @Inject
     private PokemonService pokemonService;
+    @Inject
+    private HttpServletRequest request;
     private Pokemon pokemon;
     private String id;
 
@@ -26,7 +29,25 @@ public class PokemonDetail implements Serializable {
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .responseSendError(HttpServletResponse.SC_NOT_FOUND, "Pokemon not found");
+            return;
         }
+
+        if (!canAccessPokemon()) {
+            FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .responseSendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+        }
+    }
+
+    private boolean canAccessPokemon() {
+        if (request.isUserInRole("ADMIN")) {
+            return true;
+        }
+        if (pokemon.getTrainer() == null) {
+            return false;
+        }
+        String currentUsername = request.getUserPrincipal().getName();
+        return currentUsername.equals(pokemon.getTrainer().getLogin());
     }
 
     public Pokemon getPokemon() {
@@ -41,11 +62,10 @@ public class PokemonDetail implements Serializable {
         this.id = id;
     }
 
-    public String getPokemonTypes() {
-        if (pokemon == null) {
+    public String getPokemonType() {
+        if (pokemon == null || pokemon.getType() == null) {
             return null;
         }
-        return pokemon.getTypes().get(0).toString()
-                + (pokemon.getTypes().size() > 1 ? ", " + pokemon.getTypes().get(1).toString() : "");
+        return pokemon.getType().toString();
     }
 }

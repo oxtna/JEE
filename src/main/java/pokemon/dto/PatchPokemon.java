@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PatchPokemon {
     private String name;
-    private List<String> types;
+    private String type;
     private Integer level;
     private Integer hitPoints;
     private Integer attack;
@@ -15,10 +15,10 @@ public class PatchPokemon {
 
     public PatchPokemon() {}
 
-    public PatchPokemon(String name, List<String> types, Integer level, Integer hitPoints, Integer attack,
+    public PatchPokemon(String name, String type, Integer level, Integer hitPoints, Integer attack,
                         Integer defence, Integer specialAttack, Integer specialDefence, Integer speed) {
         this.name = name;
-        this.types = types;
+        this.type = type;
         this.level = level;
         this.hitPoints = hitPoints;
         this.attack = attack;
@@ -36,12 +36,12 @@ public class PatchPokemon {
         this.name = name;
     }
 
-    public List<String> getTypes() {
-        return types;
+    public String getType() {
+        return type;
     }
 
-    public void setTypes(List<String> types) {
-        this.types = types;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getLevel() {

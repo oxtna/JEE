@@ -1,14 +1,17 @@
 package pokemon.converter;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
+import jakarta.faces.convert.ConverterException;
 import jakarta.faces.convert.FacesConverter;
 import jakarta.inject.Inject;
 import pokemon.entity.Region;
 import pokemon.service.RegionService;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -22,7 +25,18 @@ public class RegionConverter implements Converter<Region>, Serializable {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        return regionService.find(UUID.fromString(value)).orElse(null);
+        try {
+            UUID uuid = UUID.fromString(value);
+            Optional<Region> region = regionService.find(uuid);
+            if (region.isEmpty()) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Region not found", "Region with ID " + uuid + " does not exist"));
+            }
+            return region.get();
+        } catch (IllegalArgumentException e) {
+            throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Invalid UUID", "The provided value is not a valid UUID"));
+        }
     }
 
     @Override

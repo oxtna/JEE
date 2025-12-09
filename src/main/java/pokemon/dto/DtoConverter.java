@@ -70,7 +70,7 @@ public class DtoConverter {
             return new GetPokemon(
                     pokemon.getId(),
                     pokemon.getName(),
-                    pokemon.getTypes().stream().map(PokemonType::name).toList(),
+                    pokemon.getType().name(),
                     new GetPokemon.Region(
                             pokemon.getRegion().getId(),
                             pokemon.getRegion().getName(),
@@ -104,7 +104,7 @@ public class DtoConverter {
             return new Pokemon(
                     id,
                     putPokemon.getName(),
-                    putPokemon.getTypes().stream().map(PokemonType::valueOf).toList(),
+                    PokemonType.valueOf(putPokemon.getType()),
                     null,
                     null,
                     putPokemon.getLevel(),
@@ -124,10 +124,8 @@ public class DtoConverter {
             if (patchPokemon.getName() != null) {
                 patchedPokemon.setName(patchPokemon.getName());
             }
-            if (patchPokemon.getTypes() != null) {
-                patchedPokemon.setTypes(
-                        patchPokemon.getTypes().stream().map(PokemonType::valueOf).toList()
-                );
+            if (patchPokemon.getType() != null) {
+                patchedPokemon.setType(PokemonType.valueOf(patchPokemon.getType()));
             }
             if (patchPokemon.getLevel() != null) {
                 patchedPokemon.setLevel(patchPokemon.getLevel());

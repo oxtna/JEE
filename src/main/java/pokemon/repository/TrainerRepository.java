@@ -7,6 +7,9 @@ import java.util.UUID;
 import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import pokemon.entity.Trainer;
 
 @Dependent
@@ -20,22 +23,34 @@ public class TrainerRepository implements Repository<Trainer, UUID> {
     }
 
     public Optional<Trainer> findByLogin(String login) {
-        return em.createQuery("select t from Trainer t where t.login = :login", Trainer.class)
-                .setParameter("login", login)
-                .getResultStream()
-                .findFirst();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Trainer> query = cb.createQuery(Trainer.class);
+        Root<Trainer> trainer = query.from(Trainer.class);
+
+        query.select(trainer)
+             .where(cb.equal(trainer.get("login"), login));
+
+        return em.createQuery(query).getResultStream().findFirst();
     }
 
     public Optional<Trainer> findByName(String name) {
-        return em.createQuery("select t from Trainer t where t.name = :name", Trainer.class)
-                .setParameter("name", name)
-                .getResultStream()
-                .findFirst();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Trainer> query = cb.createQuery(Trainer.class);
+        Root<Trainer> trainer = query.from(Trainer.class);
+
+        query.select(trainer)
+             .where(cb.equal(trainer.get("name"), name));
+
+        return em.createQuery(query).getResultStream().findFirst();
     }
 
     @Override
     public Collection<Trainer> findAll() {
-        return em.createQuery("select t from Trainer t", Trainer.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Trainer> query = cb.createQuery(Trainer.class);
+        Root<Trainer> trainer = query.from(Trainer.class);
+        query.select(trainer);
+        return em.createQuery(query).getResultList();
     }
 
     @Override

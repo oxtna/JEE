@@ -1,8 +1,8 @@
 package pokemon.service;
 
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -12,14 +12,16 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import pokemon.entity.Pokemon;
+import pokemon.entity.PokemonType;
 import pokemon.entity.Region;
 import pokemon.entity.Trainer;
+import pokemon.interceptor.OperationLogged;
 import pokemon.repository.PokemonRepository;
 import pokemon.repository.RegionRepository;
 import pokemon.repository.TrainerRepository;
 
-@LocalBean
-@Stateless
+@ApplicationScoped
+@Transactional
 public class PokemonService implements Serializable {
     private PokemonRepository pokemonRepository;
     private RegionRepository regionRepository;
@@ -47,14 +49,24 @@ public class PokemonService implements Serializable {
         return pokemonRepository.findAllByLogin(trainerLogin);
     }
 
+    public Collection<Pokemon> findByFilters(String name, PokemonType type, Region region, Integer level,
+                                             Integer hitPoints, Integer attack, Integer defence,
+                                             Integer specialAttack, Integer specialDefence, Integer speed) {
+        return pokemonRepository.findByFilters(name, type, region, level, hitPoints, attack, defence,
+                specialAttack, specialDefence, speed);
+    }
+
+    @OperationLogged
     public void create(Pokemon pokemon) {
         pokemonRepository.create(pokemon);
     }
 
+    @OperationLogged
     public void update(Pokemon pokemon) {
         pokemonRepository.update(pokemon);
     }
 
+    @OperationLogged
     public void delete(UUID id) {
         pokemonRepository.delete(pokemonRepository.find(id).orElseThrow());
     }
@@ -82,6 +94,7 @@ public class PokemonService implements Serializable {
                 .toList();
     }
 
+    @OperationLogged
     public void createInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         region.setPokemon(Stream.concat(region.getPokemon().stream(), Stream.of(pokemon)).toList());
@@ -90,6 +103,7 @@ public class PokemonService implements Serializable {
         regionRepository.update(region);
     }
 
+    @OperationLogged
     public void updateInRegion(UUID regionId, Pokemon pokemon) {
         Region region = regionRepository.find(regionId).orElseThrow();
         if (!pokemon.getRegion().getId().equals(region.getId())) {
@@ -98,6 +112,7 @@ public class PokemonService implements Serializable {
         pokemonRepository.update(pokemon);
     }
 
+    @OperationLogged
     public void deleteFromRegion(UUID regionId, UUID pokemonId) {
         Region region = regionRepository.find(regionId).orElseThrow();
         Pokemon pokemon = pokemonRepository.find(pokemonId).orElseThrow();

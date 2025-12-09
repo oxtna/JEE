@@ -1,8 +1,10 @@
 package pokemon.view;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -15,13 +17,19 @@ import pokemon.service.RegionService;
 public class RegionList implements Serializable {
     @Inject
     private RegionService regionService;
+    @Inject
+    private HttpServletRequest request;
 
     public List<Region> getRegions() {
         return regionService.findAll().stream().toList();
     }
 
-    public String remove(String id) {
+    @RolesAllowed("ADMIN")
+    public void remove(String id) {
         regionService.delete(UUID.fromString(id));
-        return "region-list.xhtml?faces-redirect=true";
+    }
+
+    public boolean isAdmin() {
+        return request.isUserInRole("ADMIN");
     }
 }

@@ -27,20 +27,24 @@
         <role-name>NORMAL</role-name>
     </security-role>
 
+    <!-- Allow public access to login page and resources -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>api-endpoints</web-resource-name>
-            <url-pattern>/api/*</url-pattern>
+            <web-resource-name>public-resources</web-resource-name>
+            <url-pattern>/login.xhtml</url-pattern>
+            <url-pattern>/jakarta.faces.resource/*</url-pattern>
+            <url-pattern>/resources/*</url-pattern>
+            <url-pattern>*.png</url-pattern>
+            <url-pattern>*.jpg</url-pattern>
+            <url-pattern>*.css</url-pattern>
+            <url-pattern>*.js</url-pattern>
         </web-resource-collection>
-        <auth-constraint>
-            <role-name>NORMAL</role-name>
-            <role-name>ADMIN</role-name>
-        </auth-constraint>
     </security-constraint>
 
+    <!-- Secure all other pages -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>regions</web-resource-name>
+            <web-resource-name>protected-area</web-resource-name>
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
@@ -48,39 +52,4 @@
             <role-name>ADMIN</role-name>
         </auth-constraint>
     </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>pokemon</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>NORMAL</role-name>
-            <role-name>ADMIN</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>chat</web-resource-name>
-            <url-pattern>/chat/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>NORMAL</role-name>
-            <role-name>ADMIN</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <error-page>
-        <location>/401.xhtml</location>
-        <error-code>401</error-code>
-    </error-page>
-    <error-page>
-        <location>/403.xhtml</location>
-        <error-code>403</error-code>
-    </error-page>
-    <error-page>
-        <location>/404.xhtml</location>
-        <error-code>404</error-code>
-    </error-page>
 </web-app>

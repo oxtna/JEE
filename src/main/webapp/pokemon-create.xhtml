@@ -2,25 +2,80 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core">
 <ui:composition template="/template.xhtml">
     <f:metadata>
-        <f:viewParam name="id" value="#{pokemonCreate.id}" required="true" />
+        <f:viewParam name="regionId" value="#{pokemonCreate.regionId}" required="true" />
         <f:viewAction action="#{pokemonCreate.init()}" />
     </f:metadata>
-    <ui:define name="header">Pokemon > Pokemon Create</ui:define>
+    <ui:define name="header">#{msg['pokemon.create']}</ui:define>
     <ui:define name="content">
-<!--        <h2>#{pokemonCreate.pokemon.name}</h2>-->
-<!--        <p>Region: #{pokemonCreate.pokemon.region.name}</p>-->
-<!--        <p>Trainer: #{pokemonCreate.pokemon.trainer != null ? pokemonCreate.pokemon.trainer.name : "[None]"}</p>-->
-<!--        <p>Level: #{pokemonCreate.pokemon.level}</p>-->
-<!--        <p>Types: #{pokemonCreate.pokemonTypes}</p>-->
-<!--        <p>Hit Points: #{pokemonCreate.pokemon.hitPoints}</p>-->
-<!--        <p>Attack: #{pokemonCreate.pokemon.attack}</p>-->
-<!--        <p>Defence: #{pokemonCreate.pokemon.defence}</p>-->
-<!--        <p>Special Attack: #{pokemonCreate.pokemon.specialAttack}</p>-->
-<!--        <p>Special Defence: #{pokemonCreate.pokemon.specialDefence}</p>-->
-<!--        <p>Speed: #{pokemonCreate.pokemon.speed}</p>-->
+        <h2>#{msg['pokemon.createNew']}</h2>
+        <h:messages globalOnly="true" styleClass="error-messages" />
+        <h:form>
+            <div>
+                <h:outputLabel for="name" value="#{msg['pokemon.name']}:" />
+                <h:inputText id="name" value="#{pokemonCreate.pokemon.name}" required="true" />
+                <h:message for="name" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="region" value="#{msg['pokemon.region']}:" />
+                <h:selectOneMenu id="region" value="#{pokemonCreate.pokemon.region}" converter="regionConverter" required="true">
+                    <f:selectItems value="#{pokemonCreate.allRegions}"
+                                   var="region"
+                                   itemValue="#{region}"
+                                   itemLabel="#{region.name}" />
+                </h:selectOneMenu>
+                <h:message for="region" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="type" value="#{msg['pokemon.type']}:" />
+                <h:selectOneMenu id="type" value="#{pokemonCreate.pokemon.type}" required="true">
+                    <f:selectItems value="#{pokemonCreate.allPokemonTypes}"
+                                   var="type"
+                                   itemValue="#{type}"
+                                   itemLabel="#{type}" />
+                </h:selectOneMenu>
+                <h:message for="type" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="level" value="#{msg['pokemon.level']}:" />
+                <h:inputText id="level" value="#{pokemonCreate.pokemon.level}" required="true" />
+                <h:message for="level" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="hitPoints" value="#{msg['pokemon.hitPoints']}:" />
+                <h:inputText id="hitPoints" value="#{pokemonCreate.pokemon.hitPoints}" required="true" />
+                <h:message for="hitPoints" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="attack" value="#{msg['pokemon.attack']}:" />
+                <h:inputText id="attack" value="#{pokemonCreate.pokemon.attack}" required="true" />
+                <h:message for="attack" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="defence" value="#{msg['pokemon.defence']}:" />
+                <h:inputText id="defence" value="#{pokemonCreate.pokemon.defence}" required="true" />
+                <h:message for="defence" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="specialAttack" value="#{msg['pokemon.specialAttack']}:" />
+                <h:inputText id="specialAttack" value="#{pokemonCreate.pokemon.specialAttack}" required="true" />
+                <h:message for="specialAttack" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="specialDefence" value="#{msg['pokemon.specialDefence']}:" />
+                <h:inputText id="specialDefence" value="#{pokemonCreate.pokemon.specialDefence}" required="true" />
+                <h:message for="specialDefence" styleClass="error" />
+            </div>
+            <div>
+                <h:outputLabel for="speed" value="#{msg['pokemon.speed']}:" />
+                <h:inputText id="speed" value="#{pokemonCreate.pokemon.speed}" required="true" />
+                <h:message for="speed" styleClass="error" />
+            </div>
+            <h:commandButton value="#{msg['common.create']}" action="#{pokemonCreate.createAction()}" />
+        </h:form>
     </ui:define>
 </ui:composition>
 </html>

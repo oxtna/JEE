@@ -9,8 +9,8 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 @ApplicationScoped
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
-                loginPage = "/auth/login.xhtml",
-                errorPage = "/auth/error.xhtml"
+                loginPage = "/login.xhtml",
+                errorPage = "/login.xhtml?error=true"
         )
 )
 @DatabaseIdentityStoreDefinition(

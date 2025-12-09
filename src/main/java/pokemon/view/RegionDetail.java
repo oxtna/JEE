@@ -4,8 +4,10 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletResponse;
 import pokemon.entity.Pokemon;
@@ -20,6 +22,8 @@ public class RegionDetail implements Serializable {
     private RegionService regionService;
     @Inject
     private PokemonService pokemonService;
+    @Inject
+    private HttpServletRequest request;
     private Region region;
     private String id;
 
@@ -45,18 +49,45 @@ public class RegionDetail implements Serializable {
         this.id = id;
     }
 
-    public String removePokemon(String pokemonId) throws IOException {
+    public List<Pokemon> getFilteredPokemon() {
+        if (region == null || region.getPokemon() == null) {
+            return List.of();
+        }
+
+        if (isAdmin()) {
+            return region.getPokemon();
+        }
+
+        String currentUsername = request.getUserPrincipal().getName();
+        return region.getPokemon().stream()
+                .filter(p -> p.getTrainer() != null &&
+                           currentUsername.equals(p.getTrainer().getLogin()))
+                .toList();
+    }
+
+    public boolean isAdmin() {
+        return request.isUserInRole("ADMIN");
+    }
+
+    public boolean canManagePokemon(Pokemon pokemon) {
+        if (isAdmin()) {
+            return true;
+        }
+        if (pokemon.getTrainer() == null) {
+            return false;
+        }
+        String currentUsername = request.getUserPrincipal().getName();
+        return currentUsername.equals(pokemon.getTrainer().getLogin());
+    }
+
+    public void removePokemon(String pokemonId) {
         UUID uuid = UUID.fromString(pokemonId);
         Pokemon pokemon = pokemonService.find(uuid).orElse(null);
         if (pokemon == null) {
-            FacesContext.getCurrentInstance()
-                    .getExternalContext()
-                    .responseSendError(HttpServletResponse.SC_NOT_FOUND, "Pokemon not found");
-            return null;
+            return;
         }
-        region.setPokemon(region.getPokemon().stream().filter(p -> p != pokemon).toList());
-        regionService.update(region);
         pokemonService.delete(uuid);
-        return "region-detail.xhtml?faces-redirect=true&includeViewParams=true";
+
+        region = regionService.find(UUID.fromString(id)).orElse(region);
     }
 }

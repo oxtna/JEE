@@ -9,58 +9,84 @@
         <f:viewParam name="id" value="#{pokemonEdit.id}" required="true" />
         <f:viewAction action="#{pokemonEdit.init()}" />
     </f:metadata>
-    <ui:define name="header">Pokemon > Pokemon Edit</ui:define>
+    <ui:define name="header">#{msg['pokemon.edit']}</ui:define>
     <ui:define name="content">
-        <h2>Edit Pokemon data</h2>
+        <h2>#{msg['pokemon.editData']}</h2>
+        <h:messages globalOnly="true" />
         <h:form onreset="" enctype="multipart/form-data">
+            <h:panelGroup rendered="#{pokemonEdit.userInputPokemon != null}">
+                <div style="background-color: #fff3cd; padding: 10px; margin-bottom: 10px; border: 1px solid #ffc107;">
+                    <p><strong>#{msg['pokemon.conflict.title']}</strong></p>
+                    <p>#{msg['pokemon.conflict.description']}</p>
+                    <h:commandButton value="#{msg['pokemon.conflict.restore']}" action="#{pokemonEdit.restoreUserInputAction()}" />
+                </div>
+            </h:panelGroup>
             <div>
-                <h:outputLabel for="name" value="Name:" />
-                <h:inputText id="name" value="#{pokemonEdit.pokemon.name}" />
+                <h:outputLabel for="name" value="#{msg['pokemon.name']}:" />
+                <h:inputText id="name" value="#{pokemonEdit.pokemon.name}" required="true" />
+                <h:message for="name" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="region" value="Region:" />
-                <h:selectOneMenu value="#{pokemonEdit.pokemon.region}" converter="regionConverter">
-                    <f:selectItems value="#{pokemonEdit.allPokemonTypes}"
+                <h:outputLabel for="region" value="#{msg['pokemon.region']}:" />
+                <h:selectOneMenu id="region" value="#{pokemonEdit.pokemon.region}" converter="regionConverter" required="true">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{msg['pokemon.selectRegion']}" noSelectionOption="true" />
+                    <f:selectItems value="#{pokemonEdit.allRegions}"
                                    var="region"
                                    itemValue="#{region}"
                                    itemLabel="#{region.name}" />
                 </h:selectOneMenu>
-                <h:inputText id="region" value="#{pokemonEdit.pokemon.region.name}" />
+                <h:message for="region" />
             </div>
             <div>
-                <h:outputLabel for="types" value="Types:" />
-                <h:inputText id="types" value="#{pokemonEdit.pokemon.types[0]}" converter="pokemonTypeConverter" />
+                <h:outputLabel for="type" value="#{msg['pokemon.type']}:" />
+                <h:selectOneMenu id="type" value="#{pokemonEdit.pokemon.type}" required="true" converter="pokemonTypeConverter">
+                    <f:selectItems value="#{pokemonEdit.allPokemonTypes}"
+                                   var="type"
+                                   itemValue="#{type}"
+                                   itemLabel="#{type}" />
+                </h:selectOneMenu>
             </div>
             <div>
-                <h:outputLabel for="level" value="Level:" />
-                <h:inputText id="level" value="#{pokemonEdit.pokemon.level}" />
+                <h:outputLabel for="level" value="#{msg['pokemon.level']}:" />
+                <h:inputText id="level" value="#{pokemonEdit.pokemon.level}" required="true" />
+                <h:message for="level" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="hitPoints" value="Hit Points:" />
-                <h:inputText id="hitPoints" value="#{pokemonEdit.pokemon.hitPoints}" />
+                <h:outputLabel for="hitPoints" value="#{msg['pokemon.hitPoints']}:" />
+                <h:inputText id="hitPoints" value="#{pokemonEdit.pokemon.hitPoints}" required="true" />
+                <h:message for="hitPoints" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="attack" value="Attack:" />
-                <h:inputText id="attack" value="#{pokemonEdit.pokemon.attack}" />
+                <h:outputLabel for="attack" value="#{msg['pokemon.attack']}:" />
+                <h:inputText id="attack" value="#{pokemonEdit.pokemon.attack}" required="true" />
+                <h:message for="attack" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="defence" value="Defence:" />
-                <h:inputText id="defence" value="#{pokemonEdit.pokemon.defence}" />
+                <h:outputLabel for="defence" value="#{msg['pokemon.defence']}:" />
+                <h:inputText id="defence" value="#{pokemonEdit.pokemon.defence}" required="true" />
+                <h:message for="defence" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="specialAttack" value="Special Attack:" />
-                <h:inputText id="specialAttack" value="#{pokemonEdit.pokemon.specialAttack}" />
+                <h:outputLabel for="specialAttack" value="#{msg['pokemon.specialAttack']}:" />
+                <h:inputText id="specialAttack" value="#{pokemonEdit.pokemon.specialAttack}" required="true" />
+                <h:message for="specialAttack" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="specialDefence" value="Special Defence:" />
-                <h:inputText id="specialDefence" value="#{pokemonEdit.pokemon.specialDefence}" />
+                <h:outputLabel for="specialDefence" value="#{msg['pokemon.specialDefence']}:" />
+                <h:inputText id="specialDefence" value="#{pokemonEdit.pokemon.specialDefence}" required="true" />
+                <h:message for="specialDefence" styleClass="error" />
             </div>
             <div>
-                <h:outputLabel for="speed" value="Speed:" />
-                <h:inputText id="speed" value="#{pokemonEdit.pokemon.speed}" />
+                <h:outputLabel for="speed" value="#{msg['pokemon.speed']}:" />
+                <h:inputText id="speed" value="#{pokemonEdit.pokemon.speed}" required="true" />
+                <h:message for="speed" styleClass="error" />
             </div>
-            <h:commandButton value="Update" action="#{pokemonEdit.saveAction()}" />
-            <h:commandButton value="Reset" type="reset" />
+            <div>
+                <p><strong>#{msg['pokemon.version']}:</strong> #{pokemonEdit.pokemon.version}</p>
+                <p><strong>#{msg['pokemon.createdAt']}:</strong> #{pokemonEdit.pokemon.createdAt}</p>
+                <p><strong>#{msg['pokemon.updatedAt']}:</strong> #{pokemonEdit.pokemon.updatedAt}</p>
+            </div>
+            <h:commandButton value="#{msg['common.update']}" action="#{pokemonEdit.saveAction()}" />
         </h:form>
     </ui:define>
 </ui:composition>

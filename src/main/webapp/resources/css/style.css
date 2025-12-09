@@ -60,7 +60,19 @@ form {
     margin: 1rem 0;
 }
 
+form div {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    color: #333;
+}
+
 input[type="text"],
+input[type="password"],
 input[type="number"],
 textarea,
 select {
@@ -100,6 +112,32 @@ input[type="submit"]:hover,
 .h-command-button:hover,
 .h-command-link:hover {
     background-color: #0056b3;
+}
+
+/* === Login form === */
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    margin-bottom: 1rem;
+}
+
+.login-form input[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
 }
 
 /* === Data tables === */

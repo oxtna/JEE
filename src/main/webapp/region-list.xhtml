@@ -5,21 +5,24 @@
       xmlns:f="jakarta.faces.core"
       xmlns:h="jakarta.faces.html">
 <ui:composition template="/template.xhtml">
-    <ui:define name="header">Pokemon > Region List</ui:define>
+    <ui:define name="header">#{msg['region.list']}</ui:define>
     <ui:define name="content">
-        <h:form>
-            <h:dataTable value="#{regionList.regions}" var="region">
+        <h:form id="regionForm">
+            <h:dataTable id="regionTable" value="#{regionList.regions}" var="region">
                 <h:column>
-                    <f:facet name="header">Name</f:facet>
+                    <f:facet name="header">#{msg['common.name']}</f:facet>
                     #{region.name}
                 </h:column>
                 <h:column>
-                    <f:facet name="header">Actions</f:facet>
-                    <h:link value="Details" outcome="/region/region-detail.xhtml">
+                    <f:facet name="header">#{msg['common.actions']}</f:facet>
+                    <h:link value="#{msg['common.details']}" outcome="/region-detail.xhtml">
                         <f:param name="id" value="#{region.id}" />
                     </h:link>
-                    <h:commandButton value="Remove"
-                                     action="#{regionList.remove(region.id)}" />
+                    <h:commandButton value="#{msg['common.remove']}"
+                                     action="#{regionList.remove(region.id)}"
+                                     rendered="#{regionList.isAdmin()}">
+                        <f:ajax execute="@this" render="regionTable" />
+                    </h:commandButton>
                 </h:column>
             </h:dataTable>
         </h:form>

@@ -35,6 +35,18 @@ public class Region implements Serializable {
         this.pokemon = other.pokemon;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Region other)) return false;
+        return other.id.equals(this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     public UUID getId() {
         return id;
     }

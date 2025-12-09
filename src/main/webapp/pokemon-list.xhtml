@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<ui:composition template="/template.xhtml">
+    <ui:define name="header">#{msg['pokemon.title']}</ui:define>
+    <ui:define name="content">
+        <h2>#{msg['pokemon.title']}</h2>
+
+        <h:form id="filterForm">
+            <fieldset>
+                <legend>Filter Pokemon</legend>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div>
+                        <h:outputLabel for="nameFilter" value="#{msg['pokemon.name']}:" />
+                        <h:inputText id="nameFilter" value="#{pokemonList.nameFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="typeFilter" value="#{msg['pokemon.type']}:" />
+                        <h:selectOneMenu id="typeFilter" value="#{pokemonList.typeFilter}" converter="pokemonTypeConverter">
+                            <f:selectItem itemValue="#{null}" itemLabel="-- All --" noSelectionOption="true" />
+                            <f:selectItems value="#{pokemonList.allPokemonTypes}"
+                                           var="type"
+                                           itemValue="#{type}"
+                                           itemLabel="#{type}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div>
+                        <h:outputLabel for="regionFilter" value="#{msg['pokemon.region']}:" />
+                        <h:selectOneMenu id="regionFilter" value="#{pokemonList.regionFilter}" converter="regionConverter">
+                            <f:selectItem itemValue="#{null}" itemLabel="-- All --" noSelectionOption="true" />
+                            <f:selectItems value="#{pokemonList.allRegions}"
+                                           var="region"
+                                           itemValue="#{region}"
+                                           itemLabel="#{region.name}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div>
+                        <h:outputLabel for="levelFilter" value="#{msg['pokemon.level']}:" />
+                        <h:inputText id="levelFilter" value="#{pokemonList.levelFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="hitPointsFilter" value="#{msg['pokemon.hitPoints']}:" />
+                        <h:inputText id="hitPointsFilter" value="#{pokemonList.hitPointsFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="attackFilter" value="#{msg['pokemon.attack']}:" />
+                        <h:inputText id="attackFilter" value="#{pokemonList.attackFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="defenceFilter" value="#{msg['pokemon.defence']}:" />
+                        <h:inputText id="defenceFilter" value="#{pokemonList.defenceFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="specialAttackFilter" value="#{msg['pokemon.specialAttack']}:" />
+                        <h:inputText id="specialAttackFilter" value="#{pokemonList.specialAttackFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="specialDefenceFilter" value="#{msg['pokemon.specialDefence']}:" />
+                        <h:inputText id="specialDefenceFilter" value="#{pokemonList.specialDefenceFilter}" />
+                    </div>
+                    <div>
+                        <h:outputLabel for="speedFilter" value="#{msg['pokemon.speed']}:" />
+                        <h:inputText id="speedFilter" value="#{pokemonList.speedFilter}" />
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <h:commandButton value="Apply Filters" action="#{pokemonList.applyFilters()}">
+                        <f:ajax execute="@form" render="pokemonForm:pokemonTable" />
+                    </h:commandButton>
+                    <h:commandButton value="Clear Filters" action="#{pokemonList.clearFilters()}">
+                        <f:ajax execute="@form" render="@form pokemonForm:pokemonTable" />
+                    </h:commandButton>
+                </div>
+            </fieldset>
+        </h:form>
+
+        <h:form id="pokemonForm">
+            <h:dataTable id="pokemonTable" value="#{pokemonList.pokemons}" var="pokemon">
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.name']}</f:facet>
+                    #{pokemon.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.type']}</f:facet>
+                    #{pokemon.type}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.region']}</f:facet>
+                    #{pokemon.region.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.level']}</f:facet>
+                    #{pokemon.level}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.version']}</f:facet>
+                    #{pokemon.version}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.createdAt']}</f:facet>
+                    #{pokemon.createdAt}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.updatedAt']}</f:facet>
+                    #{pokemon.updatedAt}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['common.actions']}</f:facet>
+                    <h:link value="#{msg['common.details']}" outcome="/pokemon-detail.xhtml">
+                        <f:param name="id" value="#{pokemon.id}" />
+                    </h:link>
+                    <h:link value="#{msg['common.edit']}" outcome="/pokemon-edit.xhtml">
+                        <f:param name="id" value="#{pokemon.id}" />
+                    </h:link>
+                    <h:commandButton value="#{msg['common.remove']}"
+                                     action="#{pokemonList.remove(pokemon.id)}"
+                                     rendered="#{pokemonList.isAdmin()}">
+                        <f:ajax execute="@this" render="pokemonTable" />
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

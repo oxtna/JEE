@@ -1,9 +1,11 @@
 package pokemon.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import pokemon.validation.ValidPokemonLevel;
 
 import java.io.Serializable;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -11,32 +13,67 @@ import java.util.UUID;
 public class Pokemon implements Serializable {
     @Id
     private UUID id;
+
+    @Version
+    private Long version;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @NotBlank(message = "{pokemon.name.notBlank}")
+    @Size(min = 1, max = 50, message = "{pokemon.name.size}")
     private String name;
-    @ElementCollection(targetClass = PokemonType.class, fetch = FetchType.EAGER)
+
+    @NotNull(message = "{pokemon.type.notNull}")
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "pokemon_types", joinColumns = @JoinColumn(name = "pokemon_id"))
-    @Column(name = "types", nullable = false)
-    private List<PokemonType> types;
+    @Column(name = "type", nullable = false)
+    private PokemonType type;
+
     @ManyToOne
     private Region region;
+
     @ManyToOne
     private Trainer trainer;
+
+    @NotNull(message = "{pokemon.level.notNull}")
+    @ValidPokemonLevel
     private Integer level;
+
+    @NotNull(message = "{pokemon.hitPoints.notNull}")
+    @Min(value = 1, message = "{pokemon.hitPoints.min}")
     private Integer hitPoints;
+
+    @NotNull(message = "{pokemon.attack.notNull}")
+    @Min(value = 1, message = "{pokemon.attack.min}")
     private Integer attack;
+
+    @NotNull(message = "{pokemon.defence.notNull}")
+    @Min(value = 1, message = "{pokemon.defence.min}")
     private Integer defence;
+
+    @NotNull(message = "{pokemon.specialAttack.notNull}")
+    @Min(value = 1, message = "{pokemon.specialAttack.min}")
     private Integer specialAttack;
+
+    @NotNull(message = "{pokemon.specialDefence.notNull}")
+    @Min(value = 1, message = "{pokemon.specialDefence.min}")
     private Integer specialDefence;
+
+    @NotNull(message = "{pokemon.speed.notNull}")
+    @Min(value = 1, message = "{pokemon.speed.min}")
     private Integer speed;
 
     public Pokemon() {}
 
-    public Pokemon(UUID id, String name, List<PokemonType> types, Region region, Trainer trainer, Integer level,
+    public Pokemon(UUID id, String name, PokemonType type, Region region, Trainer trainer, Integer level,
                    Integer hitPoints, Integer attack, Integer defence, Integer specialAttack, Integer specialDefence,
                    Integer speed) {
         this.id = id;
         this.name = name;
-        this.types = types;
+        this.type = type;
         this.region = region;
         this.trainer = trainer;
         this.level = level;
@@ -50,8 +87,11 @@ public class Pokemon implements Serializable {
 
     public Pokemon(Pokemon other) {
         this.id = other.id;
+        this.version = other.version;
+        this.createdAt = other.createdAt;
+        this.updatedAt = other.updatedAt;
         this.name = other.name;
-        this.types = other.types;
+        this.type = other.type;
         this.region = other.region;
         this.trainer = other.trainer;
         this.level = other.level;
@@ -61,6 +101,29 @@ public class Pokemon implements Serializable {
         this.specialAttack = other.specialAttack;
         this.specialDefence = other.specialDefence;
         this.speed = other.speed;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Pokemon other)) return false;
+        return other.id.equals(this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
     public UUID getId() {
@@ -79,12 +142,12 @@ public class Pokemon implements Serializable {
         this.name = name;
     }
 
-    public List<PokemonType> getTypes() {
-        return types;
+    public PokemonType getType() {
+        return type;
     }
 
-    public void setTypes(List<PokemonType> types) {
-        this.types = types;
+    public void setType(PokemonType type) {
+        this.type = type;
     }
 
     public Region getRegion() {
@@ -157,5 +220,29 @@ public class Pokemon implements Serializable {
 
     public void setSpeed(Integer speed) {
         this.speed = speed;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

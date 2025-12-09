@@ -1,22 +1,259 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="#{localeBean.language}"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="jakarta.faces.core"
       xmlns:h="jakarta.faces.html"
       xmlns:ui="jakarta.faces.facelets">
-<f:view>
+<f:view locale="#{localeBean.locale}">
     <h:head>
         <title><ui:insert name="title">Pokemon</ui:insert></title>
-        <link rel="stylesheet" href="style.css" />
+        <style>
+            /* === Base layout === */
+            body {
+                font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f7f8fa;
+                color: #333;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            /* === Header === */
+            header {
+                background-color: #243447;
+                color: #fff;
+                padding: 1rem 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            header h1 {
+                margin: 0;
+                font-size: 1.6rem;
+            }
+
+            nav a,
+            nav h\:link {
+                color: #cfd8dc;
+                margin-right: 1rem;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            nav a:hover,
+            nav h\:link:hover {
+                color: #fff;
+            }
+
+            /* === Main content === */
+            main {
+                flex: 1;
+                padding: 2rem;
+                max-width: 900px;
+                margin: 0 auto;
+                background-color: #fff;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                border-radius: 8px;
+            }
+
+            h2, h3 {
+                color: #243447;
+                border-bottom: 2px solid #e0e0e0;
+                padding-bottom: 0.3rem;
+            }
+
+            /* === Forms === */
+            form {
+                margin: 1rem 0;
+            }
+
+            form div {
+                margin-bottom: 1rem;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 0.3rem;
+                font-weight: 500;
+                color: #333;
+            }
+
+            input[type="text"],
+            input[type="password"],
+            input[type="number"],
+            textarea,
+            select {
+                width: 100%;
+                padding: 0.5rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 1rem;
+                box-sizing: border-box;
+                transition: border-color 0.2s;
+            }
+
+            input:focus,
+            textarea:focus,
+            select:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            button,
+            input[type="submit"],
+            .h-command-button,
+            .h-command-link {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 0.5rem 1rem;
+                font-size: 0.95rem;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                text-decoration: none;
+            }
+
+            button:hover,
+            input[type="submit"]:hover,
+            .h-command-button:hover,
+            .h-command-link:hover {
+                background-color: #0056b3;
+            }
+
+            /* === Login form === */
+            .login-container {
+                max-width: 400px;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .login-container h2 {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .login-form input[type="text"],
+            .login-form input[type="password"] {
+                margin-bottom: 1rem;
+            }
+
+            .login-form input[type="submit"] {
+                width: 100%;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            /* === Data tables === */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 1rem 0;
+                background-color: #fafafa;
+            }
+
+            th, td {
+                padding: 0.75rem;
+                text-align: left;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            th {
+                background-color: #f0f0f0;
+                color: #333;
+                font-weight: 600;
+            }
+
+            tr:hover {
+                background-color: #f5faff;
+            }
+
+            /* === Messages === */
+            .ui-messages,
+            h\:messages {
+                margin: 1rem 0;
+                padding: 0.75rem;
+                border-radius: 4px;
+                font-size: 0.95rem;
+            }
+
+            .ui-messages-error,
+            .ui-message-error,
+            h\:messages.error {
+                background-color: #ffebee;
+                border: 1px solid #c62828;
+                color: #b71c1c;
+            }
+
+            .ui-messages-info,
+            .ui-message-info,
+            h\:messages.info {
+                background-color: #e3f2fd;
+                border: 1px solid #1976d2;
+                color: #0d47a1;
+            }
+
+            /* === Footer === */
+            footer {
+                background-color: #243447;
+                color: #cfd8dc;
+                text-align: center;
+                padding: 1rem;
+                font-size: 0.9rem;
+                margin-top: auto;
+            }
+
+            /* === Utility classes === */
+            .text-center {
+                text-align: center;
+            }
+
+            .actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .actions form {
+                display: inline;
+            }
+
+            a, h\:link {
+                background-color: #11ad2c;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 0.4rem 1rem;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                text-decoration: none;
+            }
+
+            a:hover, h\:link:hover {
+                background-color: #09751c;
+            }
+        </style>
     </h:head>
 
     <h:body>
         <header>
-            <h1><ui:insert name="header">Pokemon</ui:insert></h1>
-            <img src="banner.png" alt="obrazek" />
+            <h1><ui:insert name="header">#{msg['pokemon.title']}</ui:insert></h1>
+            <h:graphicImage value="/banner_#{localeBean.language}.png" alt="Pokemon" />
             <nav>
-                <h:link value="Home page" outcome="/index.xhtml" />
-                <h:link value="Regions" outcome="/region/region-list.xhtml" />
+                <h:link value="#{msg['nav.home']}" outcome="/index.xhtml" />
+                <h:link value="#{msg['nav.regions']}" outcome="/region-list.xhtml" />
+                <h:link value="#{msg['nav.pokemon']}" outcome="/pokemon-list.xhtml" rendered="#{request.isUserInRole('ADMIN')}" />
+                <h:link value="#{msg['nav.chat']}" outcome="/chat.xhtml" />
+                <span style="color: #cfd8dc; margin-right: 1rem;">#{request.userPrincipal.name}</span>
+                <h:form style="display: inline; margin: 0;">
+                    <h:commandLink value="#{msg['nav.logout']}" action="#{request.logout()}" />
+                </h:form>
             </nav>
         </header>
 

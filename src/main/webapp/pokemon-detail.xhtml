@@ -8,19 +8,22 @@
         <f:viewParam name="id" value="#{pokemonDetail.id}" required="true" />
         <f:viewAction action="#{pokemonDetail.init()}" />
     </f:metadata>
-    <ui:define name="header">Pokemon > Pokemon Detail</ui:define>
+    <ui:define name="header">#{msg['pokemon.detail']}</ui:define>
     <ui:define name="content">
         <h2>#{pokemonDetail.pokemon.name}</h2>
-        <p>Region: #{pokemonDetail.pokemon.region.name}</p>
-        <p>Trainer: #{pokemonDetail.pokemon.trainer != null ? pokemonDetail.pokemon.trainer.name : "[None]"}</p>
-        <p>Level: #{pokemonDetail.pokemon.level}</p>
-        <p>Types: #{pokemonDetail.pokemonTypes}</p>
-        <p>Hit Points: #{pokemonDetail.pokemon.hitPoints}</p>
-        <p>Attack: #{pokemonDetail.pokemon.attack}</p>
-        <p>Defence: #{pokemonDetail.pokemon.defence}</p>
-        <p>Special Attack: #{pokemonDetail.pokemon.specialAttack}</p>
-        <p>Special Defence: #{pokemonDetail.pokemon.specialDefence}</p>
-        <p>Speed: #{pokemonDetail.pokemon.speed}</p>
+        <p>#{msg['pokemon.region']}: #{pokemonDetail.pokemon.region.name}</p>
+        <p>#{msg['pokemon.trainer']}: #{pokemonDetail.pokemon.trainer != null ? pokemonDetail.pokemon.trainer.name : "[None]"}</p>
+        <p>#{msg['pokemon.level']}: #{pokemonDetail.pokemon.level}</p>
+        <p>#{msg['pokemon.type']}: #{pokemonDetail.pokemonType}</p>
+        <p>#{msg['pokemon.hitPoints']}: #{pokemonDetail.pokemon.hitPoints}</p>
+        <p>#{msg['pokemon.attack']}: #{pokemonDetail.pokemon.attack}</p>
+        <p>#{msg['pokemon.defence']}: #{pokemonDetail.pokemon.defence}</p>
+        <p>#{msg['pokemon.specialAttack']}: #{pokemonDetail.pokemon.specialAttack}</p>
+        <p>#{msg['pokemon.specialDefence']}: #{pokemonDetail.pokemon.specialDefence}</p>
+        <p>#{msg['pokemon.speed']}: #{pokemonDetail.pokemon.speed}</p>
+        <p>#{msg['pokemon.version']}: #{pokemonDetail.pokemon.version}</p>
+        <p>#{msg['pokemon.createdAt']}: #{pokemonDetail.pokemon.createdAt}</p>
+        <p>#{msg['pokemon.updatedAt']}: #{pokemonDetail.pokemon.updatedAt}</p>
     </ui:define>
 </ui:composition>
 </html>

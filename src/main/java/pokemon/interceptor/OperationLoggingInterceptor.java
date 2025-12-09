@@ -7,7 +7,6 @@ import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 import jakarta.security.enterprise.SecurityContext;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -15,27 +14,42 @@ import java.util.logging.Logger;
 @Interceptor
 @Priority(Interceptor.Priority.APPLICATION)
 public class OperationLoggingInterceptor {
-    private static final Logger logger = Logger.getLogger(OperationLoggingInterceptor.class.getName());
+
+    private static final Logger LOGGER = Logger.getLogger(OperationLoggingInterceptor.class.getName());
 
     @Inject
     private SecurityContext securityContext;
 
     @AroundInvoke
-    public Object intercept(InvocationContext ctx) throws Exception {
-        String methodName = ctx.getMethod().getName();
+    public Object logOperation(InvocationContext context) throws Exception {
+        String methodName = context.getMethod().getName();
         String username = getUsername();
-        UUID resourceId = getResourceId(ctx.getParameters());
-        switch (methodName) {
-            case "save" -> logger.info(String.format("User %s is saving resource %s", username, resourceId));
-            case "update" -> logger.info(String.format("User %s is updating resource %s", username, resourceId));
-            case "delete" -> logger.info(String.format("User %s is deleting resource %s", username, resourceId));
+        Object[] parameters = context.getParameters();
+
+        if (methodName.equals("create") || methodName.equals("save") || methodName.equals("update")) {
+            UUID resourceId = extractResourceId(parameters);
+            String operation = methodName.equals("create") || methodName.equals("save") ? "CREATE" : "UPDATE";
+            LOGGER.info(String.format("User '%s' is performing operation: %s on resource ID: %s",
+                    username, operation, resourceId));
+        } else if (methodName.equals("delete")) {
+            UUID resourceId = extractResourceId(parameters);
+            LOGGER.info(String.format("User '%s' is performing operation: DELETE on resource ID: %s",
+                    username, resourceId));
         }
-        Object result = ctx.proceed();
-        switch (methodName) {
-            case "save" -> logger.info(String.format("User %s has saved resource %s", username, resourceId));
-            case "update" -> logger.info(String.format("User %s has updated resource %s", username, resourceId));
-            case "delete" -> logger.info(String.format("User %s has deleted resource %s", username, resourceId));
+
+        Object result = context.proceed();
+
+        if (methodName.equals("create") || methodName.equals("save") || methodName.equals("update")) {
+            UUID resourceId = extractResourceId(parameters);
+            String operation = methodName.equals("create") || methodName.equals("save") ? "CREATE" : "UPDATE";
+            LOGGER.info(String.format("User '%s' successfully completed operation: %s on resource ID: %s",
+                    username, operation, resourceId));
+        } else if (methodName.equals("delete")) {
+            UUID resourceId = extractResourceId(parameters);
+            LOGGER.info(String.format("User '%s' successfully completed operation: DELETE on resource ID: %s",
+                    username, resourceId));
         }
+
         return result;
     }
 
@@ -45,29 +59,29 @@ public class OperationLoggingInterceptor {
                 return securityContext.getCallerPrincipal().getName();
             }
         } catch (Exception e) {
-            logger.warning("Failed to get username: " + e.getMessage());
+            LOGGER.warning("Could not retrieve username: " + e.getMessage());
         }
-        return "[#]";
+        return "UNKNOWN";
     }
 
-    private UUID getResourceId(Object[] params) {
-        if (params != null && params.length > 0) {
-            if (params[0] instanceof UUID) {
-                return (UUID) params[0];
-            }
-            return tryInvokeGetId(params[0]);
-        }
-        return null;
-    }
+    private UUID extractResourceId(Object[] parameters) {
+        if (parameters != null && parameters.length > 0) {
+            Object param = parameters[0];
 
-    private UUID tryInvokeGetId(Object param) {
-        try {
-            Method getIdMethod = param.getClass().getMethod("getId");
-            Object id = getIdMethod.invoke(param);
-            if (id instanceof UUID) {
-                return (UUID) id;
+            if (param instanceof UUID) {
+                return (UUID) param;
             }
-        } catch (Exception ignored) {}
+
+            try {
+                java.lang.reflect.Method getIdMethod = param.getClass().getMethod("getId");
+                Object id = getIdMethod.invoke(param);
+                if (id instanceof UUID) {
+                    return (UUID) id;
+                }
+            } catch (Exception e) {
+                // Ignore
+            }
+        }
         return null;
     }
 }

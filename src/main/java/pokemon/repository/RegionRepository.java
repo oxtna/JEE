@@ -6,7 +6,11 @@ import java.util.UUID;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import pokemon.entity.Region;
 
 @Dependent
@@ -20,13 +24,27 @@ public class RegionRepository implements Repository<Region, UUID> {
     }
 
     public Optional<Region> findByName(String name) {
-        return Optional.of(em.createQuery("select r from Region r where r.name = :name", Region.class)
-                .setParameter("name", name).getSingleResult());
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Region> query = cb.createQuery(Region.class);
+        Root<Region> region = query.from(Region.class);
+
+        query.select(region)
+             .where(cb.equal(region.get("name"), name));
+
+        try {
+            return Optional.of(em.createQuery(query).getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Collection<Region> findAll() {
-        return em.createQuery("select r from Region r", Region.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Region> query = cb.createQuery(Region.class);
+        Root<Region> region = query.from(Region.class);
+        query.select(region);
+        return em.createQuery(query).getResultList();
     }
 
     @Override

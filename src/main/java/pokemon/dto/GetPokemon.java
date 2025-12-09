@@ -72,7 +72,7 @@ public class GetPokemon {
 
     private UUID id;
     private String name;
-    private List<String> types;
+    private String type;
     private Region region;
     private Trainer trainer;
     private Integer level;
@@ -85,12 +85,12 @@ public class GetPokemon {
 
     public GetPokemon() {}
 
-    public GetPokemon(UUID id, String name, List<String> types, Region region, Trainer trainer, Integer level,
+    public GetPokemon(UUID id, String name, String type, Region region, Trainer trainer, Integer level,
                       Integer hitPoints, Integer attack, Integer defence, Integer specialAttack, Integer specialDefence,
                       Integer speed) {
         this.id = id;
         this.name = name;
-        this.types = types;
+        this.type = type;
         this.region = region;
         this.trainer = trainer;
         this.level = level;
@@ -118,12 +118,12 @@ public class GetPokemon {
         this.name = name;
     }
 
-    public List<String> getTypes() {
-        return types;
+    public String getType() {
+        return type;
     }
 
-    public void setTypes(List<String> types) {
-        this.types = types;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Region getRegion() {

@@ -1,8 +1,8 @@
 package pokemon.service;
 
-import jakarta.ejb.LocalBean;
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -10,10 +10,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import pokemon.entity.Region;
+import pokemon.interceptor.OperationLogged;
 import pokemon.repository.RegionRepository;
 
-@LocalBean
-@Stateless
+@ApplicationScoped
+@Transactional
 public class RegionService implements Serializable {
     private RegionRepository regionRepository;
 
@@ -36,14 +37,17 @@ public class RegionService implements Serializable {
         return regionRepository.findByName(name);
     }
 
+    @OperationLogged
     public void create(Region region) {
         regionRepository.create(region);
     }
 
+    @OperationLogged
     public void update(Region region) {
         regionRepository.update(region);
     }
 
+    @OperationLogged
     public void delete(UUID id) {
         regionRepository.delete(regionRepository.find(id).orElseThrow());
     }

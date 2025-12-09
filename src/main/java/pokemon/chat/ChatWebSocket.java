@@ -8,13 +8,15 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import pokemon.dto.ChatMessage;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @ApplicationScoped
-@ServerEndpoint("/chat-ws")
+@ServerEndpoint("/chat-websocket")
 public class ChatWebSocket {
     private static final Logger logger = Logger.getLogger(ChatWebSocket.class.getName());
     private static final Map<String, Session> sessions = new ConcurrentHashMap<>();
@@ -23,78 +25,108 @@ public class ChatWebSocket {
     @OnOpen
     public void onOpen(Session session) {
         String username = getUsername(session);
-        if (username.isBlank()) {
+        if (username == null || username.isEmpty()) {
             return;
         }
         sessions.put(username, session);
-        logger.info(String.format("New session for trainer: %s", username));
-        // TODO: maybe add message like "new trainer joined"
+        logger.info("WebSocket opened for user: " + username);
+
+        broadcastUserList();
     }
 
     @OnClose
     public void onClose(Session session) {
         String username = getUsername(session);
-        if (username.isBlank()) {
-            return;
+        if (username != null) {
+            sessions.remove(username);
+            logger.info("WebSocket closed for user: " + username);
+
+            broadcastUserList();
         }
-        sessions.remove(username);
-        logger.info(String.format("Closed session for trainer: %s", username));
-        // TODO: maybe add message like "trainer left"
+    }
+
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        String username = getUsername(session);
+        logger.log(Level.WARNING, "WebSocket error for user: " + username, throwable);
+        if (username != null) {
+            sessions.remove(username);
+        }
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        logger.info(String.format("Received message: %s", message));
-    }
-
-    @OnError
-    public void onError(Session session, Throwable error) {
-        String username = getUsername(session);
-        logger.warning(String.format("Trainer '%s' crashed: %s", username, error.getMessage()));
-        sessions.remove(username);
+        logger.info("Received message via WebSocket: " + message);
     }
 
     public void onChatMessage(@Observes ChatMessageEvent event) {
         ChatMessage message = event.getMessage();
-        String jsonPayload = jsonb.toJson(message);
-        logger.info(String.format("Sending message from trainer '%s': %s", message.getSender(), message.getContent()));
-        if (message.isPublic()) {
-            broadcast(jsonPayload);
-        } else {
-            sendPayload(sessions.get(message.getSender()), jsonPayload);
-            sendPayload(sessions.get(message.getRecipient()), jsonPayload);
-        }
-    }
+        String jsonMessage = jsonb.toJson(message);
 
-    public static Set<String> getActiveTrainers() {
-        return sessions.keySet();
-    }
+        logger.info("Broadcasting chat message from: " + message.getSender() +
+                " to: " + (message.isPrivateMessage() ? message.getRecipient() : "ALL"));
 
-    private void broadcast(String payload) {
-        for (Session session : sessions.values()) {
-            sendPayload(session, payload);
-        }
-    }
-
-    private void sendPayload(Session session, String payload) {
-        try {
-            if (session == null || !session.isOpen()) {
-                return;
+        if (message.isPrivateMessage()) {
+            sendToUser(message.getSender(), jsonMessage);
+            if (!message.getSender().equals(message.getRecipient())) {
+                sendToUser(message.getRecipient(), jsonMessage);
             }
-            session.getBasicRemote().sendText(payload);
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
+        } else {
+            broadcast(jsonMessage);
         }
+    }
+
+    private void broadcast(String message) {
+        sessions.values().forEach(session -> {
+            try {
+                if (session.isOpen()) {
+                    session.getBasicRemote().sendText(message);
+                }
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Failed to send message", e);
+            }
+        });
+    }
+
+    private void sendToUser(String username, String message) {
+        Session session = sessions.get(username);
+        if (session != null && session.isOpen()) {
+            try {
+                session.getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Failed to send message to user: " + username, e);
+            }
+        }
+    }
+
+    private void broadcastUserList() {
+        Set<String> onlineUsers = sessions.keySet();
+        String userListJson = jsonb.toJson(Map.of("type", "userList", "users", onlineUsers));
+        broadcast(userListJson);
     }
 
     private String getUsername(Session session) {
         if (session == null) {
-            return "";
+            return null;
         }
         String query = session.getQueryString();
         if (query == null || !query.contains("username=")) {
-            return "";
+            return null;
         }
-        return query.split("username=")[1];
+        String username = query.replace("username=", "");
+        int ampersandIndex = username.indexOf('&');
+        if (ampersandIndex > 0) {
+            username = username.substring(0, ampersandIndex);
+        }
+        try {
+            return java.net.URLDecoder.decode(username, "UTF-8");
+        } catch (Exception e) {
+            logger.warning("Failed to decode username: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static Set<String> getOnlineUsers() {
+        return sessions.keySet();
     }
 }

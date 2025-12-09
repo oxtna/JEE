@@ -9,32 +9,51 @@
         <f:viewParam name="id" value="#{regionDetail.id}" required="true" />
         <f:viewAction action="#{regionDetail.init()}" />
     </f:metadata>
-    <ui:define name="header">Pokemon > Region Detail</ui:define>
+    <ui:define name="header">#{msg['region.detail']}</ui:define>
     <ui:define name="content">
         <h2>#{regionDetail.region.name}</h2>
-        <p>Generation: #{regionDetail.region.generation}</p>
-        <p>Professor: #{regionDetail.region.professor}</p>
-        <h:form>
-            <h3>Pokemon in this generation</h3>
-            <h:dataTable value="#{regionDetail.region.pokemon}" var="pokemon">
+        <p>#{msg['region.generation']}: #{regionDetail.region.generation}</p>
+        <p>#{msg['region.professor']}: #{regionDetail.region.professor}</p>
+        <h:form id="pokemonForm">
+            <h3>#{msg['region.pokemon']}</h3>
+            <h:dataTable id="pokemonTable" value="#{regionDetail.filteredPokemon}" var="pokemon">
                 <h:column>
-                    <f:facet name="header">Name</f:facet>
+                    <f:facet name="header">#{msg['common.name']}</f:facet>
                     #{pokemon.name}
                 </h:column>
                 <h:column>
-                    <f:facet name="header">Actions</f:facet>
-                    <h:link value="Details" outcome="pokemon-detail.xhtml">
+                    <f:facet name="header">#{msg['pokemon.version']}</f:facet>
+                    #{pokemon.version}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.createdAt']}</f:facet>
+                    #{pokemon.createdAt}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['pokemon.updatedAt']}</f:facet>
+                    #{pokemon.updatedAt}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['common.actions']}</f:facet>
+                    <h:link value="#{msg['common.details']}" outcome="pokemon-detail.xhtml"
+                            rendered="#{regionDetail.canManagePokemon(pokemon)}">
                         <f:param name="id" value="#{pokemon.id}" />
                     </h:link>
-                    <h:link value="Edit" outcome="pokemon-edit.xhtml">
+                    <h:link value="#{msg['common.edit']}" outcome="pokemon-edit.xhtml"
+                            rendered="#{regionDetail.canManagePokemon(pokemon)}">
                         <f:param name="id" value="#{pokemon.id}" />
                     </h:link>
-                    <h:commandButton value="Remove"
-                                     action="#{regionDetail.removePokemon(pokemon.id)}" />
+                    <h:commandButton value="#{msg['common.remove']}"
+                                     action="#{regionDetail.removePokemon(pokemon.id)}"
+                                     rendered="#{regionDetail.canManagePokemon(pokemon)}">
+                        <f:ajax execute="@this" render="pokemonTable" />
+                    </h:commandButton>
                 </h:column>
             </h:dataTable>
         </h:form>
-        <h:link value="Create" outcome="pokemon-create.xhtml" />
+        <h:link value="#{msg['pokemon.createNew']}" outcome="pokemon-create.xhtml">
+            <f:param name="regionId" value="#{regionDetail.region.id}" />
+        </h:link>
     </ui:define>
 </ui:composition>
 </html>
